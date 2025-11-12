@@ -2,29 +2,30 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: [true, "Please provide your name"],
-    },
-    email: {
-      type: String,
-      required: [true, "Please provide your email"],
-      unique: true, // No two users can have the same email
-    },
-    password: {
-      type: String,
-      select: false, // Don't return password by default in queries
-    },
-    image: {
-      type: String,
-    },
-    // We will add Stripe Customer ID here later
-    stripeCustomerId: {
-      type: String,
-    },
+    name: { type: String, required: [true, "Please provide your name"] },
+    email: { type: String, required: [true, "Please provide your email"], unique: true },
+    password: { type: String, select: false },
+    image: { type: String },
+
+    // --- NEW ADDRESS FIELDS ---
+    address: { type: String },
+    city: { type: String },
+    zip: { type: String },
+    notes: { type: String }, // Gate codes, parking info, etc.
+    // --------------------------
+
+    // Scheduling Fields
+    preferredDay1: { type: String },
+    preferredTime1: { type: String },
+    preferredDay2: { type: String }, // <-- NEW
+    preferredTime2: { type: String }, // <-- NEW
+
+    // Stripe Data
+    stripeCustomerId: { type: String, unique: true, sparse: true },
+    subscriptionId: { type: String },
+    isSubscribed: { type: Boolean, default: false },
   },
-  { timestamps: true } // Automatically adds createdAt and updatedAt
+  { timestamps: true }
 );
 
-// If the model already exists (hot reload), use it; otherwise create a new one.
 export default mongoose.models?.User || mongoose.model("User", UserSchema);

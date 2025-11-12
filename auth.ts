@@ -1,19 +1,17 @@
-import NextAuth from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-import connectDB from "./lib/db"
-import User from "./lib/models/User"
-import bcrypt from "bcryptjs"
+import NextAuth from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
+import connectDB from './lib/db';
+import User from './lib/models/User';
+import bcrypt from 'bcryptjs';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
-      // This function runs when someone tries to log in
       authorize: async (credentials) => {
         if (!credentials?.email || !credentials?.password) {
           return null;
@@ -21,50 +19,54 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         await connectDB();
 
-        // 1. Find user by email, and explicitly ask for the password (we hid it by default in the model)
-        const user = await User.findOne({ email: credentials.email }).select("+password");
+        // 2. Find user, ALSO get role
+        const user = await User.findOne({
+          email: credentials.email,
+        }).select('+password +role'); // <-- 3. ADD +role HERE
 
-        if (!user) {
-            // User not found
-            return null;
-        }
+        if (!user) return null;
 
-        // 2. Check if the password matches the encrypted one in the DB
         const isMatch = await bcrypt.compare(
           credentials.password as string,
           user.password
         );
 
-        if (!isMatch) {
-            // Wrong password
-            return null;
-        }
+        if (!isMatch) return null;
 
-        // 3. Login successful, return safe user data
-        return { id: user._id.toString(), name: user.name, email: user.email };
+        // 4. Return the user, including the role
+        return {
+          id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+          role: user.role, // <-- 5. ADD THIS
+        };
       },
     }),
   ],
   pages: {
-    signIn: '/login', // We will build a custom login page later
+    signIn: '/login',
   },
-  callbacks: {
-    // This ensures the User ID is available in the session throughout the app
-    async session({ session, token }) {
-      if (token.sub && session.user) {
-         // @ts-ignore
-        session.user.id = token.sub;
-      }
-      return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.sub = user.id;
-      }
-      return token;
-    }
-  },
-  session: {
-    strategy: "jwt",
-  },
-})
+  // callbacks: {
+  //   // 6. This set of callbacks ensures the 'role' is on the session
+  //   async jwt({ token, user }) {
+  //     if (user) {
+  //       token.sub = user.id;
+  //       // @ts-ignore
+  //       token.role = user.role;
+  //     }
+  //     return token;
+  //   },
+  //   async session({ session, token }) {
+  //     if (token.sub && session.user) {
+  //       // @ts-ignore
+  //       session.user.id = token.sub;
+  //       // @ts-ignore
+  //       session.user.role = token.role;
+  //     }
+  //     return session;
+  //   },
+  // },
+  // session: {
+  //   strategy: 'jwt',
+  // },
+});
