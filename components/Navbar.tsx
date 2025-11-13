@@ -3,7 +3,45 @@
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+// import { Menu, X } from "lucide-react"; // <-- WE ARE REMOVING THIS
+
+// --- We are adding the icons directly as components ---
+const MenuIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="28"
+    height="28"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="3" y1="12" x2="21" y2="12"></line>
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+);
+
+const XIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="28"
+    height="28"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+);
+// ---------------------------------------------------
+
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -12,7 +50,6 @@ export default function Navbar() {
   return (
     <nav id="navbar" className="fixed w-full z-[1000] px-5 py-5 md:px-12 bg-black/95 backdrop-blur-md border-b border-white/10 transition-all duration-300">
       
-      {/* Container with the mobile alignment fix (no 'flex-wrap') */}
       <div className="max-w-[1400px] mx-auto flex items-center justify-between">
         
         {/* Logo Area */}
@@ -40,7 +77,8 @@ export default function Navbar() {
           className="md:hidden text-white hover:text-[#ff3366] transition-all"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          {/* --- We now use the SVG components --- */}
+          {menuOpen ? <XIcon /> : <MenuIcon />}
         </button>
 
         {/* Desktop Navigation Links */}
