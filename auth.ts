@@ -18,7 +18,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         await connectDB();
-
+        
         // 2. Find user, ALSO get role
         const user = await User.findOne({
           email: credentials.email,
@@ -46,27 +46,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: '/login',
   },
-  // callbacks: {
-  //   // 6. This set of callbacks ensures the 'role' is on the session
-  //   async jwt({ token, user }) {
-  //     if (user) {
-  //       token.sub = user.id;
-  //       // @ts-ignore
-  //       token.role = user.role;
-  //     }
-  //     return token;
-  //   },
-  //   async session({ session, token }) {
-  //     if (token.sub && session.user) {
-  //       // @ts-ignore
-  //       session.user.id = token.sub;
-  //       // @ts-ignore
-  //       session.user.role = token.role;
-  //     }
-  //     return session;
-  //   },
-  // },
-  // session: {
-  //   strategy: 'jwt',
-  // },
+  callbacks: {
+    // 6. This set of callbacks ensures the 'role' is on the session
+    async jwt({ token, user }) {
+      if (user) {
+        token.sub = user.id;
+        // @ts-ignore
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token.sub && session.user) {
+        // @ts-ignore
+        session.user.id = token.sub;
+        // @ts-ignore
+        session.user.role = token.role;
+      }
+      return session;
+    },
+  },
+  session: {
+    strategy: 'jwt',
+  },
 });

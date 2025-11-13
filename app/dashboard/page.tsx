@@ -16,7 +16,7 @@ async function getDashboardData(userId: string) {
   
   const [user, cars] = await Promise.all([
     User.findById(userId)
-      .select('name email isSubscribed address city zip notes preferredDay1 preferredTime1 preferredDay2 preferredTime2') 
+      .select('name email isSubscribed address city zip notes preferredDay1 preferredTime1 preferredDay2 preferredTime2 phone') 
       .lean(),
     Car.find({ userId }).sort({ createdAt: -1 }).lean(),
   ]);
@@ -34,6 +34,7 @@ async function getDashboardData(userId: string) {
     preferredTime1: (user as any).preferredTime1 || null,
     preferredDay2: (user as any).preferredDay2 || null,
     preferredTime2: (user as any).preferredTime2 || null,
+    phone: (user as any).phone || null,
   };
   // -----------------------
 

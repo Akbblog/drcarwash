@@ -1,9 +1,15 @@
 import Link from "next/link";
+import { auth } from "@/auth";
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import HeroCarousel from "@/components/HeroCarousel";
 
-export default function Home() {
+
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const session = await auth(); 
+  const buttonHref = session ? "/dashboard" : "/register";
   return (
     <div className="bg-[#0a0a0a] text-white min-h-screen">
 
@@ -35,7 +41,7 @@ export default function Home() {
                     </p>
                 </Reveal>
 
-<Reveal delay={0.3}>
+            <Reveal delay={0.3}>
                 <div className="flex gap-12 mb-12">
                     <div>
                         <span className="block text-5xl font-black text-[#ff3366] mb-1">2x</span>
@@ -50,7 +56,7 @@ export default function Home() {
 
                 <Reveal delay={0.4}>
                     <div className="flex flex-wrap gap-5">
-                        <Link href="/register" className="px-8 md:px-10 py-4 bg-[#ff3366] text-white uppercase tracking-[2px] font-bold text-[13px] rounded-sm hover:translate-y-[-2px] hover:shadow-[0_20px_40px_rgba(255,51,102,0.3)] transition-all">
+                        <Link href={buttonHref} className="px-8 md:px-10 py-4 bg-[#ff3366] text-white uppercase tracking-[2px] font-bold text-[13px] rounded-sm hover:translate-y-[-2px] hover:shadow-[0_20px_40px_rgba(255,51,102,0.3)] transition-all">
                             Start Membership
                         </Link>
                         <Link href="#services" className="px-8 md:px-10 py-4 bg-transparent text-white border border-white/30 uppercase tracking-[2px] font-bold text-[13px] rounded-sm backdrop-blur-md hover:bg-white/10 hover:border-white transition-all">
@@ -138,7 +144,7 @@ export default function Home() {
                       <div className="text-7xl font-black mb-2 relative z-10">$249<span className="text-2xl font-bold">/mo</span></div>
                       <div className="w-12 h-1 bg-white/50 mb-6 relative z-10"></div>
                       <p className="text-white/90 font-medium mb-8 relative z-10">+ $100 per extra vehicle</p>
-                      <Link href="/register" className="px-10 py-4 bg-white text-[#ff3366] font-bold uppercase tracking-[2px] text-sm rounded-full hover:scale-105 transition-all shadow-xl relative z-10">
+                      <Link href={buttonHref} className="px-10 py-4 bg-white text-[#ff3366] font-bold uppercase tracking-[2px] text-sm rounded-full hover:scale-105 transition-all shadow-xl relative z-10">
                           Subscribe Now
                       </Link>
                   </div>

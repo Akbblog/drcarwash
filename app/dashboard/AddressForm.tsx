@@ -9,6 +9,8 @@ type Props = {
     address?: string;
     city?: string;
     zip?: string;
+    // --- ADD 'phone' HERE ---
+    phone?: string;
     notes?: string;
     preferredDay1?: string;
     preferredTime1?: string;
@@ -67,47 +69,46 @@ function TimeSelect({ name, defaultValue }: { name: string, defaultValue?: strin
 export default function AddressForm({ userData }: Props) {
   const [state, formAction] = useFormState(updateServiceDetails, {});
   
-  // This is the data from the server
   const serverHasDetails = userData?.address && userData.preferredDay1 && userData.preferredDay2;
-  
-  // --- THIS IS THE FIX ---
-  // We add a client-side state to track if details are saved.
-  // This lets us hide the form *instantly* on success.
   const [currentHasDetails, setCurrentHasDetails] = useState(!!serverHasDetails);
-  
   const [isEditing, setIsEditing] = useState(!serverHasDetails);
 
   useEffect(() => {
     if (state?.success) {
-      setIsEditing(false); // Hide form
-      setCurrentHasDetails(true); // Mark details as saved
+      setIsEditing(false);
+      setCurrentHasDetails(true);
     }
   }, [state?.success]);
 
   // Show saved data
-  // This condition now works instantly on save
   if (currentHasDetails && !isEditing) {
     return (
-       <div className="bg-[#111] border border-white/5 p-6 rounded-xl">
+        <div className="bg-[#111] border border-white/5 p-6 rounded-xl">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-white uppercase tracking-widest font-bold">
             Address & Visit Details
           </h3>
-           <button 
-             onClick={() => setIsEditing(true)}
-             className="text-xs text-[#999] uppercase tracking-widest hover:text-[#ff3366]"
-           >
-             [ Edit ]
-           </button>
+            <button 
+              onClick={() => setIsEditing(true)}
+              className="text-xs text-[#999] uppercase tracking-widest hover:text-[#ff3366]"
+            >
+              [ Edit ]
+            </button>
         </div>
         <p className="text-sm text-green-500 mb-4">Your details are saved.</p>
         <div className="font-mono text-sm text-white/70 space-y-4">
           <div>
             <p className="text-xs text-[#999] uppercase">Address</p>
-            {/* We use userData here so it shows the *latest* data from the server */}
             <p>{userData.address}</p>
             <p>{userData.city}, {userData.zip}</p>
           </div>
+          
+          {/* --- ADD THIS BLOCK TO SHOW PHONE --- */}
+          <div>
+            <p className="text-xs text-[#999] uppercase">Contact</p>
+            <p>{userData.phone || 'N/A'}</p>
+          </div>
+
           <div>
             <p className="text-xs text-[#999] uppercase">Visit 1 Preference</p>
             <p>{userData.preferredDay1} ({userData.preferredTime1})</p>
@@ -137,15 +138,15 @@ export default function AddressForm({ userData }: Props) {
       )}
       <form action={formAction} className="space-y-4">
         {/* --- Address Fields --- */}
-        <p className="text-sm text-[#999] font-bold tracking-wider">Step 1: Location</p>
+        <p className="text-sm text-[#999] font-bold tracking-wider">Step 1: Add Location & Schedule</p>
         <div>
           <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-            Street Address
+            
           </label>
           <input
             name="address"
             type="text"
-            placeholder="123 MAIN ST"
+            placeholder="Street Address"
             defaultValue={userData.address}
             required
             className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
@@ -153,19 +154,29 @@ export default function AddressForm({ userData }: Props) {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">City</label>
-            <input name="city" type="text" placeholder="YOUR CITY" defaultValue={userData.city} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2"></label>
+            <input name="city" type="text" placeholder="Your City" defaultValue={userData.city} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
           <div>
-            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Zip Code</label>
-            <input name="zip" type="text" placeholder="12345" defaultValue={userData.zip} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2"></label>
+            <input name="zip" type="text" placeholder="Zip Code" defaultValue={userData.zip} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
+        </div>
+        
+        {/* --- ADD THIS BLOCK FOR PHONE --- */}
+        <div>
+          <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
+            Contact Phone
+            
+          </label>
+          <input
+            name="phone" type="tel" placeholder="Your contact number"defaultValue={userData.phone} required
+            className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
         </div>
         
         {/* --- Scheduling Fields --- */}
         <p className="text-sm text-[#999] font-bold tracking-wider pt-4">Step 2: Scheduling (2 Visits)</p>
         
-        {/* Visit 1 */}
         <div className="p-4 bg-black/30 border border-white/5 rounded-lg">
           <label className="block text-[11px] text-white uppercase tracking-widest mb-2">Visit 1 Preference</label>
           <div className="grid grid-cols-2 gap-4">
@@ -174,10 +185,9 @@ export default function AddressForm({ userData }: Props) {
           </div>
         </div>
         
-        {/* Visit 2 */}
         <div className="p-4 bg-black/30 border border-white/5 rounded-lg">
           <label className="block text-[11px] text-white uppercase tracking-widest mb-2">Visit 2 Preference</label>
-           <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4">
             <DaySelect name="preferredDay2" defaultValue={userData.preferredDay2} />
             <TimeSelect name="preferredTime2" defaultValue={userData.preferredTime2} />
           </div>

@@ -2,13 +2,17 @@
 
 import Link from "next/link";
 import { useSession } from "next-auth/react"; // <-- 2. Import useSession
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
-export default function Navbar() { // <-- 3. Remove 'async'
-  const { data: session } = useSession(); // <-- 4. Use the useSession hook
+export default function Navbar() {
+  const { data: session } = useSession();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <nav id="navbar" className="fixed w-full z-[1000] px-5 py-5 md:px-12 bg-black/95 backdrop-blur-md border-b border-white/10 transition-all duration-300">
-        <div className="max-w-[1400px] mx-auto flex flex-wrap items-center justify-between">
+        <div className="max-w-[1400px] mx-auto flex items-center justify-between">
+        
             {/* Logo Area (Your new SVG is unchanged) */}
             <Link href="/" className="flex items-center no-underline transition-transform duration-300 hover:scale-105">
                 {/* --- NEW, CORRECTED SVG --- */}
