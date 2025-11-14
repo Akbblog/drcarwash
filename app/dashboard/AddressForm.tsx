@@ -1,110 +1,82 @@
 'use client';
 
-import { addCar } from '@/app/actions/user';
+// Import any actions you need for updating user data (e.g., updateUserData)
+// import { updateUserData } from '@/app/actions/user'; 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
-export default function AddCarForm() {
-  const [pending, setPending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setPending(true);
-    setError(null);
-
-    const formData = new FormData(e.currentTarget);
-
-    try {
-      const result = await addCar(formData);
-
-      if (result.error) {
-        setError(result.error);
-      } else {
-        router.push('/dashboard'); // redirect after successful addition
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Unexpected error occurred.');
-    } finally {
-      setPending(false);
-    }
+// 1. 🔑 DEFINING THE PROPS INTERFACE
+// This is the essential fix for the 'userData does not exist' error.
+interface AddressFormProps {
+  userData: {
+    address: any; 
+    city: any; 
+    zip: any; 
+    notes: any; 
+    preferredDay1: any; 
+    preferredTime1: any; 
+    preferredDay2: any; 
+    preferredTime2: any; 
+    phone: any; 
   };
+}
 
-  return (
-    <div className="bg-[#111] border border-white/5 p-6 rounded-xl">
-      <h3 className="text-white uppercase tracking-widest font-bold mb-6">
-        Add New Vehicle
-      </h3>
+// 2. 🎯 UPDATING THE COMPONENT SIGNATURE
+export default function AddressForm({ userData }: AddressFormProps) {
+    const [pending, setPending] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-      {error && (
-        <p className="mb-4 p-3 bg-red-500/10 text-red-500 text-xs text-center border border-red-500/20">
-          {error}
-        </p>
-      )}
+    // Placeholder for your form submission logic
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setPending(true);
+        setError(null);
+        
+        // ... Your actual form submission logic will go here
+        
+        setPending(false);
+    };
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-            Make
-          </label>
-          <input
-            name="make"
-            type="text"
-            placeholder="Vehicle Make"
-            required
-            className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
-          />
+    return (
+        <div className="bg-[#111] border border-white/5 p-6 rounded-xl">
+            <h3 className="text-white uppercase tracking-widest font-bold mb-6">
+                Service Preferences
+            </h3>
+
+            {error && (
+                <p className="mb-4 p-3 bg-red-500/10 text-red-500 text-xs text-center border border-red-500/20">
+                    {error}
+                </p>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Example of using the passed prop for default values */}
+                <div>
+                    <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
+                        Address
+                    </label>
+                    <input
+                        name="address"
+                        type="text"
+                        defaultValue={userData.address || ''} 
+                        placeholder="Your Service Address"
+                        required
+                        className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
+                    />
+                </div>
+                {/* Add the rest of your AddressForm fields here */}
+                
+                <p className="text-[#999] text-xs pt-2">
+                    (You can fill in the remaining form fields here, using other `userData` properties like `userData.city` for default values.)
+                </p>
+                
+                <button
+                    type="submit"
+                    disabled={pending}
+                    className="w-full py-3 bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-[#ff3366] hover:text-white transition-all disabled:opacity-50"
+                >
+                    {pending ? 'SAVING...' : 'SAVE PREFERENCES'}
+                </button>
+            </form>
         </div>
-
-        <div>
-          <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-            Model
-          </label>
-          <input
-            name="model"
-            type="text"
-            placeholder="Vehicle Model"
-            required
-            className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
-          />
-        </div>
-
-        <div>
-          <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-            Color
-          </label>
-          <input
-            name="color"
-            type="text"
-            placeholder="Vehicle Color"
-            required
-            className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
-          />
-        </div>
-
-        <div>
-          <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-            License Plate
-          </label>
-          <input
-            name="licensePlate"
-            type="text"
-            placeholder="License Plate Number"
-            required
-            className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={pending}
-          className="w-full py-3 bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-[#ff3366] hover:text-white transition-all disabled:opacity-50"
-        >
-          {pending ? 'ADDING...' : 'ADD VEHICLE'}
-        </button>
-      </form>
-    </div>
-  );
+    );
 }
