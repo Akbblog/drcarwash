@@ -6,6 +6,14 @@ import connectDB from "@/lib/db";
 import User from "@/lib/models/User";
 import bcrypt from "bcryptjs";
 
+// --- Type for JWT token ---
+interface TokenType {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: string | null;
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: MongoDBAdapter(clientPromise),
   providers: [
@@ -31,12 +39,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         if (!passwordsMatch) return null;
 
-        // ✅ Must include emailVerified for AdapterUser
+        // ✅ Add emailVerified explicitly
         return {
           id: user._id.toString(),
           name: user.name,
           email: user.email,
-          emailVerified: null, // required
+          emailVerified: null,
         };
       },
     }),
@@ -55,22 +63,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.name = user.name;
-        token.email = user.email;
-        token.emailVerified = user.emailVerified ?? null; // ✅ include emailVerified
+        const u = user as unknown as TokenType; // ✅ cast to TokenType
+        token.id = u.id;
+        token.name = u.name;
+        token.email = u.email;
+        token.emailVerified = u.emailVerified ?? null;
       }
       return token;
     },
+
     async session({ session, token }) {
-      if (token) {
-        session.user = {
-          id: token.id as string,
-          name: token.name as string,
-          email: token.email as string,
-          emailVerified: token.emailVerified ?? null, // ✅ required
-        };
-      }
+      const t = token as unknown as TokenType; // ✅ cast to TokenType
+      session.user = {
+        id: t.id,
+        name: t.name,
+        email: t.email,
+        emailVerified: t.emailVerified,
+      };
       return session;
     },
   },
