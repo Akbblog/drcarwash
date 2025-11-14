@@ -76,11 +76,12 @@ export default function AddressForm({ userData }: Props) {
   const [isEditing, setIsEditing] = useState(!serverHasDetails);
 
   useEffect(() => {
-    if (state?.success) {
-      setIsEditing(false);
-      setCurrentHasDetails(true);
+  if (success) {
+    setIsEditing(false);
+    setCurrentHasDetails(true);
     }
-  }, [state?.success]);
+  }, [success]);
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
