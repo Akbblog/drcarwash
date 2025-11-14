@@ -11,7 +11,7 @@ interface TokenType {
   id: string;
   name: string;
   email: string;
-  emailVerified: string | null;
+  emailVerified: Date | null;
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -39,12 +39,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         if (!passwordsMatch) return null;
 
-        // ✅ Add emailVerified explicitly
+        // ✅ emailVerified must be Date | null
         return {
           id: user._id.toString(),
           name: user.name,
           email: user.email,
-          emailVerified: null,
+          emailVerified: null, // NextAuth expects Date | null
         };
       },
     }),
@@ -63,7 +63,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        const u = user as unknown as TokenType; // ✅ cast to TokenType
+        const u = user as unknown as TokenType;
         token.id = u.id;
         token.name = u.name;
         token.email = u.email;
@@ -73,12 +73,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
 
     async session({ session, token }) {
-      const t = token as unknown as TokenType; // ✅ cast to TokenType
+      const t = token as unknown as TokenType;
       session.user = {
         id: t.id,
         name: t.name,
         email: t.email,
-        emailVerified: t.emailVerified,
+        emailVerified: t.emailVerified ?? null, // ✅ now Date | null
       };
       return session;
     },
