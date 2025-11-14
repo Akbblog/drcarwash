@@ -21,7 +21,9 @@ export default function AddCarForm({ userId }: AddCarFormProps) {
     const formData = new FormData(e.currentTarget);
 
     try {
-      const result = await addCar(formData, userId); // pass userId
+      // ⬇️ THIS IS THE CORRECTED LINE ⬇️
+      const result = await addCar(formData); 
+      // We removed "userId" because addCar already fetches it on the server.
 
       if (result.error) {
         setError(result.error);
