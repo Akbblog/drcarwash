@@ -76,20 +76,21 @@ export default function AddressForm({ userData }: Props) {
   const [isEditing, setIsEditing] = useState(!serverHasDetails);
 
   useEffect(() => {
-  if (success) {
+  if (state?.success) {
     setIsEditing(false);
     setCurrentHasDetails(true);
-    }
-  }, [success]);
+  }
+}, [state?.success]);
 
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setPending(true);
   setError(null);
 
   const formData = new FormData(e.currentTarget);
-  const data = Object.fromEntries(formData) as {
+  const data = Object.fromEntries(formData.entries()) as {
     address: string;
     city: string;
     zip: string;
@@ -102,9 +103,12 @@ export default function AddressForm({ userData }: Props) {
   };
 
   try {
-    const result = await updateServiceDetails(userData.id, data);
+    // Remove userData.id reference if it doesn't exist
+    const result = await updateServiceDetails(data);
+
     if (result.success) {
-      setSuccess(true);
+      setIsEditing(false);
+      setCurrentHasDetails(true);
     } else {
       setError(result.error || 'An error occurred while saving details.');
     }
@@ -115,6 +119,7 @@ export default function AddressForm({ userData }: Props) {
     setPending(false);
   }
 };
+
 
   // Show saved data
   if (currentHasDetails && !isEditing) {
@@ -159,6 +164,38 @@ export default function AddressForm({ userData }: Props) {
         </div>
       </div>
     );
+  }
+// Form submit handler
+async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+
+  const formData = new FormData(event.currentTarget);
+  const data = Object.fromEntries(formData.entries()) as {
+    address?: string;
+    city?: string;
+    zip?: string;
+    phone?: string;
+    notes?: string;
+    preferredDay1?: string;
+    preferredTime1?: string;
+    preferredDay2?: string;
+    preferredTime2?: string;
+  };
+
+    try {
+      // Use just `data` if your backend doesn't require ID
+      const result = await updateServiceDetails(data);
+
+      if (result.success) {
+        setIsEditing(false);
+        setCurrentHasDetails(true);
+      } else {
+        alert('An error occurred while saving details.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred while saving details.');
+    }
   }
 
   // Show form
