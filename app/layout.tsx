@@ -1,24 +1,21 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import AppSessionProvider from "./SessionProvider"; 
-import { auth } from "@/auth"; // ⬅ NEXTAUTH v5 correct import
+import AppSessionProvider from "./SessionProvider";
+import { auth } from "@/auth"; // Correct NextAuth v5 import
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Family Car Wash | Premium Doorstep Service",
   description: "We wash, you relax. Bi-weekly car care subscription.",
-  icons: {
-    icon: '/icon.png',
-    apple: '/apple-icon.png',
-  },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const session = await auth(); // ⬅ Fetch session correctly for v5
+  const session = await auth(); // fetch session server-side
 
   return (
     <html lang="en" className="scroll-smooth">
