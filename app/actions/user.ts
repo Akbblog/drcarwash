@@ -79,7 +79,7 @@ export async function addCar(prevState: State, formData: FormData): Promise<Stat
     
     // --- 3. ALSO FIX THIS ONE ---
     revalidatePath('/dashboard');
-    redirect('/dashboard'); // This forces a reload with new data
+    
 
   } catch (error) {
     console.error(error);
