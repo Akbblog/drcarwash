@@ -44,7 +44,7 @@ export default function AddCarForm() {
 
   return (
     <div className="bg-[#111] border border-white/5 p-5 rounded-xl">
-      {/* 🔑 LAYOUT FIX: Reduced margin below header (mb-4) */}
+      {/* Reduced margin below header (mb-4) */}
       <h3 className="text-white uppercase tracking-widest font-bold mb-4">
         Add New Vehicle
       </h3>
@@ -60,10 +60,11 @@ export default function AddCarForm() {
         </p>
       )}
       
-      {/* 🔑 SPACING FIX: Reduced overall vertical spacing (space-y-3) */}
+      {/* Reduced overall vertical spacing (space-y-3) */}
       <form action={formAction} className="space-y-3">
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* 🔑 FIXED STACK FIX: Removed sm:grid-cols-2 */}
+        <div className="grid grid-cols-1 gap-4">
           
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Make</label>
@@ -76,7 +77,8 @@ export default function AddCarForm() {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* 🔑 FIXED STACK FIX: Removed sm:grid-cols-2 */}
+        <div className="grid grid-cols-1 gap-4">
           
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Color</label>
