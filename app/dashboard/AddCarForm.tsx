@@ -66,10 +66,9 @@ export default function AddCarForm() {
       <form action={formAction} className="space-y-4">
         
         <div className="grid grid-cols-2 gap-4">
-          
-          <div>
-            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Make</label>
-            <input name="make" type="text" placeholder="e.g. TOYOTA" required className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+<div>
+<label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Make</label>
+            <input name="make" type="text" placeholder="e.g. TOYOTA" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
           
           <div>
