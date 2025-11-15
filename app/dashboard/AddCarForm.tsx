@@ -2,7 +2,7 @@
 
 import { addCar } from '@/app/actions/user';
 import { useFormState, useFormStatus } from 'react-dom';
-import { useState, useEffect } from 'react'; // Imports needed for collapsible UI
+import { useState, useEffect } from 'react';
 
 // The initial state must match the return type of the action.
 const initialState: { error?: string; success?: string } = {};
@@ -31,7 +31,6 @@ export default function AddCarForm() {
     }
   }, [state?.success]);
 
-  // --- CONDITIONAL BUTTON RENDER ---
   if (!isOpen) {
     return (
       <button
@@ -43,14 +42,12 @@ export default function AddCarForm() {
     );
   }
 
-  // --- MAIN FORM RENDER ---
   return (
     <div className="bg-[#111] border border-white/5 p-5 rounded-xl">
       <h3 className="text-white uppercase tracking-widest font-bold mb-5">
         Add New Vehicle
       </h3>
       
-      {/* Error/Success messages */}
       {state?.error && (
         <p className="mb-4 p-3 bg-red-500/10 text-red-500 text-xs text-center border border-red-500/20">
           {state.error}
@@ -62,31 +59,33 @@ export default function AddCarForm() {
         </p>
       )}
       
-      {/* Tighter vertical spacing (space-y-4) */}
       <form action={formAction} className="space-y-4">
         
-        <div className="grid grid-cols-2 gap-4">
-<div>
-<label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Make</label>
-            <input name="make" type="text" placeholder="e.g. TOYOTA" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+        {/* 🔑 RESPONSIVE FIX: grid-cols-1 for mobile, sm:grid-cols-2 for desktop/tablet */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <div>
+            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Make</label>
+            <input name="make" type="text" placeholder="e.g. TOYOTA" required className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
           
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Model</label>
-            <input name="model" type="text" placeholder="e.g. CAMRY" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <input name="model" type="text" placeholder="e.g. CAMRY" required className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-4">
+        {/* 🔑 RESPONSIVE FIX: grid-cols-1 for mobile, sm:grid-cols-2 for desktop/tablet */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Color</label>
-            <input name="color" type="text" placeholder="e.g. BLACK" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <input name="color" type="text" placeholder="e.g. BLACK" required className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
           
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">License Plate</label>
-            <input name="licensePlate" type="text" placeholder="e.g. 8ABC123" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <input name="licensePlate" type="text" placeholder="e.g. 8ABC123" required className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
         </div>
         
