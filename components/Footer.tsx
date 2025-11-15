@@ -27,7 +27,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="text-white uppercase tracking-widest font-bold mb-4 text-xs">Legal</h4>
+          
           <ul className="space-y-2">
             <li><Link href="/contact" className="text-[#999] text-sm hover:text-[#ff3366] transition-colors">Contact Us</Link></li>
           </ul>
