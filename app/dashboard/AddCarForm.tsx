@@ -61,31 +61,33 @@ export default function AddCarForm() {
       
       <form action={formAction} className="space-y-4">
         
-        {/* 🔑 RESPONSIVE FIX: grid-cols-1 for mobile, sm:grid-cols-2 for desktop/tablet */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Make</label>
-            <input name="make" type="text" placeholder="e.g. TOYOTA" required className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            {/* 🔑 STYLE FIX: Changed py-2 back to py-3 to match reference image height */}
+            <input name="make" type="text" placeholder="e.g. TOYOTA" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
           
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Model</label>
-            <input name="model" type="text" placeholder="e.g. CAMRY" required className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            {/* 🔑 STYLE FIX: Changed py-2 back to py-3 to match reference image height */}
+            <input name="model" type="text" placeholder="e.g. CAMRY" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
         </div>
         
-        {/* 🔑 RESPONSIVE FIX: grid-cols-1 for mobile, sm:grid-cols-2 for desktop/tablet */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Color</label>
-            <input name="color" type="text" placeholder="e.g. BLACK" required className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            {/* 🔑 STYLE FIX: Changed py-2 back to py-3 to match reference image height */}
+            <input name="color" type="text" placeholder="e.g. BLACK" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
           
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">License Plate</label>
-            <input name="licensePlate" type="text" placeholder="e.g. 8ABC123" required className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            {/* 🔑 STYLE FIX: Changed py-2 back to py-3 to match reference image height */}
+            <input name="licensePlate" type="text" placeholder="e.g. 8ABC123" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
         </div>
         
