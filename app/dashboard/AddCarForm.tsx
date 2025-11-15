@@ -62,32 +62,63 @@ export default function AddCarForm() {
           {state.success}
         </p>
       )}
-  <form action={formAction} className="space-y-6"></form>
-      <form action={formAction} className="space-y-4">
+{/* ALIGNMENT FIX: Increased vertical spacing on the form (space-y-6) */}
+      <form action={formAction} className="space-y-6">
+        
         <div className="grid grid-cols-2 gap-4">
+          {/* Make Input */}
           <div>
+            {/* Label style remains the same */}
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Make</label>
-            <input name="make" type="text" placeholder="e.g. TOYOTA" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            {/* ALIGNMENT FIX: Reduced input height (py-2 instead of py-3) for a cleaner line */}
+            <input 
+                name="make" 
+                type="text" 
+                placeholder="e.g. TOYOTA" 
+                required 
+                className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" 
+            />
           </div>
+          {/* Model Input */}
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Model</label>
-            <input name="model" type="text" placeholder="e.g. CAMRY" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <input 
+                name="model" 
+                type="text" 
+                placeholder="e.g. CAMRY" 
+                required 
+                className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" 
+            />
           </div>
         </div>
+        
         <div className="grid grid-cols-2 gap-4">
+          {/* Color Input */}
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Color</label>
-            <input name="color" type="text" placeholder="e.g. BLACK" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <input 
+                name="color" 
+                type="text" 
+                placeholder="e.g. BLACK" 
+                required 
+                className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" 
+            />
           </div>
+          {/* License Plate Input */}
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">License Plate</label>
-            <input name="licensePlate" type="text" placeholder="e.g. 8ABC123" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <input 
+                name="licensePlate" 
+                type="text" 
+                placeholder="e.g. 8ABC123" 
+                required 
+                className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" 
+            />
           </div>
         </div>
         
         <SubmitButton />
         
-        {/* 🔑 COLLAPSIBLE UI: Button to manually close the form */}
         <button
           type="button"
           onClick={() => setIsOpen(false)}
