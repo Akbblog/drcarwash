@@ -143,7 +143,7 @@ export default async function HomePage() {
                       <h3 className="text-xl font-black uppercase tracking-[4px] mb-6 relative z-10">Family Plan</h3>
                       <div className="text-7xl font-black mb-2 relative z-10">$249<span className="text-2xl font-bold">/mo</span></div>
                       <div className="w-12 h-1 bg-white/50 mb-6 relative z-10"></div>
-                      <p className="text-white/90 font-medium mb-8 relative z-10">+ $100 per extra vehicle</p>
+                      <p className="text-white/90 font-medium mb-8 relative z-10">+ $50 per extra vehicle</p>
                       <Link href={buttonHref} className="px-10 py-4 bg-white text-[#ff3366] font-bold uppercase tracking-[2px] text-sm rounded-full hover:scale-105 transition-all shadow-xl relative z-10">
                           Subscribe Now
                       </Link>
