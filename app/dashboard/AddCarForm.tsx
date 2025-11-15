@@ -2,14 +2,11 @@
 
 import { addCar } from '@/app/actions/user';
 import { useFormState, useFormStatus } from 'react-dom';
-import { useState } from 'react'; 
-// NOTE: Removed useEffect and useState for 'isOpen' as the form will always be visible.
+import { useState, useEffect } from 'react'; // 🔑 We need useState and useEffect for the collapsible UI
 
-// Define the initial state for useFormState. It must match the Result type 
-// returned by the addCar server action.
+// The initial state must match the return type of the action.
 const initialState: { error?: string; success?: string } = {};
 
-// Helper component to display the submission status (Pending)
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
@@ -24,29 +21,47 @@ function SubmitButton() {
 }
 
 export default function AddCarForm() {
-  // 🔑 CORE CHANGE: We use useFormState to manage the form state and action.
-  // The 'formAction' is passed directly to the <form action={...}> prop.
+  // State hook for Server Action response
   const [state, formAction] = useFormState(addCar, initialState);
+  
+  // 🔑 COLLAPSIBLE UI: State to manage the visibility of the form.
+  const [isOpen, setIsOpen] = useState(false);
 
+  // 🔑 COLLAPSIBLE UI: Automatically close the form on successful submission.
+  useEffect(() => {
+    if (state?.success) {
+      setIsOpen(false);
+    }
+  }, [state?.success]);
+
+  // 🔑 COLLAPSIBLE UI: Conditional rendering. Show button if not open.
+  if (!isOpen) {
+    return (
+      <button
+        onClick={() => setIsOpen(true)}
+        className="w-full text-center py-4 bg-[#111] border border-white/5 rounded-xl uppercase tracking-widest font-bold text-xs text-white/70 hover:text-white hover:border-white/20 transition-all"
+      >
+        + Add New Vehicle
+      </button>
+    );
+  }
+
+  // Show the full form when isOpen is true.
   return (
     <div className="bg-[#111] border border-white/5 p-6 rounded-xl">
       <h3 className="text-white uppercase tracking-widest font-bold mb-6">
         Add New Vehicle
       </h3>
-      {/* Display Error Message */}
       {state?.error && (
         <p className="mb-4 p-3 bg-red-500/10 text-red-500 text-xs text-center border border-red-500/20">
           {state.error}
         </p>
       )}
-      {/* Display Success Message */}
       {state?.success && (
-        <p className="mb-4 p-3 bg-green-500/10 stext-green-500 text-xs text-center border border-green-500/20">
+        <p className="mb-4 p-3 bg-green-500/10 text-green-500 text-xs text-center border border-green-500/20">
           {state.success}
         </p>
       )}
-      
-      {/* 🔑 CORE CHANGE: Using action={formAction} replaces the manual onSubmit handler. */}
       <form action={formAction} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -69,9 +84,16 @@ export default function AddCarForm() {
           </div>
         </div>
         
-        {/* SubmitButton uses useFormStatus internally */}
         <SubmitButton />
         
+        {/* 🔑 COLLAPSIBLE UI: Button to manually close the form */}
+        <button
+          type="button"
+          onClick={() => setIsOpen(false)}
+          className="w-full py-2 text-xs text-[#999] uppercase tracking-widest hover:text-white"
+        >
+          Cancel
+        </button>
       </form>
     </div>
   );
