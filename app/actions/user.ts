@@ -14,7 +14,7 @@ type Result = {
 // ---------------------------------------------
 // Your existing addCar function
 // ---------------------------------------------
-export async function addCar(formData: FormData): Promise<Result> {
+export async function addCar(prevState: Result, formData: FormData): Promise<Result> {
   const session = await auth();
   if (!session?.user?.id) {
     return { error: 'You must be logged in to add a car.' };
