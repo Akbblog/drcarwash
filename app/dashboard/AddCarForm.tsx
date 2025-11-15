@@ -45,10 +45,7 @@ export default function AddCarForm() {
   return (
     <div className="bg-[#111] border border-white/5 p-5 rounded-xl">
       {/* Reduced margin below header (mb-4) */}
-      <h3 className="text-white uppercase tracking-widest font-bold mb-4">
-        Add New Vehicle
-      </h3>
-      
+      <h3 className="text-white uppercase tracking-widest font-bold mb-2"></h3>    
       {state?.error && (
         <p className="mb-4 p-3 bg-red-500/10 text-red-500 text-xs text-center border border-red-500/20">
           {state.error}
