@@ -73,7 +73,7 @@ export default function AddCarForm() {
           
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Model</label>
-            <input name="model" type="text" placeholder="e.g. CAMRY" required className="w-full bg-black border border-white/10 px-4 py-2 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <input name="model" type="text" placeholder="e.g. CAMRY" required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
         </div>
         
