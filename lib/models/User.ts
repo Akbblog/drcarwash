@@ -29,6 +29,15 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     sparse: true, // Allows multiple null values
   },
+
+  // --- SERVICE & SUBSCRIPTION DETAILS ---
+  isSubscribed: { type: Boolean, default: false },
+  stripeCustomerId: { type: String },
+  
+  // --- NEW FIELD FOR WAITING LIST ---
+  isOnWaitingList: { type: Boolean, default: false },
+
+
   // --- SERVICE DETAILS ---
   address: { type: String },
   city: { type: String },
