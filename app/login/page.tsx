@@ -1,22 +1,37 @@
 "use client";
 
-import { authenticate } from "@/app/actions/login";
-import { useFormState, useFormStatus } from "react-dom";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useFormState } from "react-dom";
+import { authenticate } from "@/app/actions/login";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+
+const initialState = {
+  success: false,
+  triggerUpdate: false,
+  error: null as string | null,
+};
 
 export default function LoginPage() {
   const router = useRouter();
-  const [state, dispatch] = useFormState(authenticate, { error: null, success: false });
+  const [state, dispatch] = useFormState(authenticate, initialState);
 
   const { update } = useSession();
 
-useEffect(() => {
-  if (state.success) {
-    update();              // 🔥 instantly re-fetch session → Navbar updates
-    router.push("/dashboard");
-  }
-}, [state.success]);
+  useEffect(() => {
+    if (state.success) {
+      update(); // 🔥 refresh NextAuth session instantly
+      router.push("/dashboard");
+    }
+  }, [state.success]);
+
+  return (
+    <form action={dispatch}>
+      {/* inputs here */}
+      {state.error && <p className="text-red-500">{state.error}</p>}
+    </form>
+  );
+}
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-6 relative overflow-hidden">
