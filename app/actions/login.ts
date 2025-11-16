@@ -9,7 +9,7 @@ export async function authenticate(prevState: string | undefined, formData: Form
     await signIn("credentials", {
       email: formData.get("email"),
       password: formData.get("password"),
-      redirectTo: "/", // Where to go after success
+      redirectTo: "/dashboard", // Where to go after success
     });
   } catch (error) {
     // NextAuth throws a special error for redirects, we must let it pass through
