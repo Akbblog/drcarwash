@@ -45,9 +45,11 @@ export default function LimitedSlotsPopup({ isLoggedIn }: { isLoggedIn: boolean 
             </button>
 
             {/* TITLE */}
-            <h2 className="text-3xl font-black text-white mb-4 leading-tight">
-              Only <span className="text-[#ff3366]">60 Membership Slots</span>
-            </h2>
+           <h2 className="text-3xl font-black text-white mb-4 leading-tight">
+              Only{" "}
+              <span className="text-[#ff3366]">60</span>{" "}
+              <span className="text-[#ff3366]">Membership Slots</span>
+            </h2>             
 
             {/* SUBTEXT */}
             <p className="text-[#999] text-sm leading-relaxed mb-8">
