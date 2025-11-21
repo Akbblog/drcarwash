@@ -14,22 +14,35 @@ export async function POST(req: Request) {
       );
     }
 
-    /* ----------  <--  changed section  <--  ---------- */
-    // → Use TLS (port 587), which is allowed on Hostinger.
+    /* ---------------------------------
+       ▲  **Diagnostic section**          ▲
+       --------------------------------- */
+    // If any of these are empty, log them so you see the exact values
+    console.log("[DEBUG] SMTP ENV:", {
+      MAIL_USER: process.env.MAIL_USER ? "*set*" : "❌ NOT SET",
+      MAIL_PASS: process.env.MAIL_PASS ? "*set*" : "❌ NOT SET",
+      MAIL_TO: process.env.MAIL_TO ? "*set*" : "❌ NOT SET",
+    });
+
+    /* ---------------------------------
+       End of diagnostic section          ▼
+       --------------------------------- */
+
     const transporter = nodemailer.createTransport({
       host: "smtp.hostinger.com",
-      port: 587,          // ← switch from 465
-      secure: false,      // ← startTLS, not SSL
+      port: 587, // TLS (STARTTLS) – not blocked by Hostinger
+      secure: false,
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
       },
+      // If your host forces TLS renegotiation you may need:
+      // tls: { rejectUnauthorized: false }
     });
-    /* ---------------------------------------------- */
 
     const mailOptions = {
       from: `"Website Contact" <${process.env.MAIL_USER}>`,
-      to: process.env.MAIL_TO, // e‑mail address that receives the message
+      to: process.env.MAIL_TO,
       subject: `New message from ${name}`,
       html: `
         <h3>New Contact Message</h3>
@@ -41,10 +54,8 @@ export async function POST(req: Request) {
 
     await transporter.sendMail(mailOptions);
 
-    // Return a simple JSON payload for the client
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (error: any) {
-    // Detailed error for debugging – still short‑lived
     console.error("CONTACT_API_ERROR:", error);
     return NextResponse.json(
       { error: error?.message || "Server error" },
