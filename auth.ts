@@ -41,19 +41,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           // include password and role explicitly
           const user = await User.findOne({ email }).select("+password +role");
+
+          // Helpful, non-sensitive server logs to diagnose sign-in issues
           if (!user) {
+            console.info(`[auth][authorize] user not found for email=${email}`);
             throw new Error("Invalid email or password");
           }
 
           if (!user.password) {
+            console.info(`[auth][authorize] user record missing password for id=${user._id}`);
             throw new Error("User account missing password");
           }
 
-          const passwordsMatch = await bcrypt.compare(
-            String(credentials.password),
-            user.password
-          );
+          const passwordsMatch = await bcrypt.compare(String(credentials.password), user.password);
           if (!passwordsMatch) {
+            console.info(`[auth][authorize] invalid password attempt for user id=${user._id}`);
             throw new Error("Invalid email or password");
           }
 

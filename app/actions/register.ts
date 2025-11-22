@@ -6,8 +6,11 @@ import bcrypt from "bcryptjs";
 
 export async function registerUser(formData: FormData) {
   const name = formData.get("name") as string;
-  const email = formData.get("email") as string;
+  const emailRaw = formData.get("email") as string;
   const password = formData.get("password") as string;
+
+  // Normalize email to lowercase to keep lookups consistent
+  const email = emailRaw ? String(emailRaw).toLowerCase().trim() : "";
 
   if (!name || !email || !password) {
     return { error: "Please fill in all fields" };
