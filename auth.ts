@@ -1,7 +1,3 @@
-// app/auth.ts
-/* ──────────────────────────────────────────────────────────────────────────────
-   Updated to include user roles in JWT & session
-   ────────────────────────────────────────────────────────────────────────────── */
 import NextAuth from "next-auth";
 import connectDB from "@/lib/db";
 import Credentials from "next-auth/providers/credentials";
@@ -10,20 +6,16 @@ import clientPromise from "@/lib/mongoClient";
 import User from "@/lib/models/User";
 import bcrypt from "bcryptjs";
 
-/* ──────────────────────────────────────────────────────────────────────────────
-   Token interface – now includes an optional role
-   ────────────────────────────────────────────────────────────────────────────── */
+/* Token interface – includes optional role */
 interface TokenType {
   id: string;
   name: string;
   email: string;
   emailVerified: Date | null;
-  role?: string; // <-- NEW
+  role?: string;
 }
 
-/* ──────────────────────────────────────────────────────────────────────────────
-   NextAuth configuration
-   ────────────────────────────────────────────────────────────────────────────── */
+/* NextAuth configuration */
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: MongoDBAdapter(clientPromise),
 
@@ -35,56 +27,64 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
 
-      /** Authorizer – verifies user credentials */
+      /** Authorizer – verifies user credentials with clear errors */
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) return null;
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            throw new Error("Missing email or password");
+          }
 
-        /* Make sure MongoDB connection is ready */
-        await connectDB();
+          // ensure DB connection
+          await connectDB();
 
-        /* Pull the user *and* the role field explicitly */
-        const user = await User.findOne({
-          email: String(credentials.email),
-        }).select("+password +role"); // ⚠️  added +role
+          const email = String(credentials.email).toLowerCase();
 
-        if (!user) return null;
+          // include password and role explicitly
+          const user = await User.findOne({ email }).select("+password +role");
+          if (!user) {
+            throw new Error("Invalid email or password");
+          }
 
-        const passwordsMatch = await bcrypt.compare(
-          String(credentials.password),
-          user.password
-        );
-        if (!passwordsMatch) return null;
+          if (!user.password) {
+            throw new Error("User account missing password");
+          }
 
-        /* Return the payload that will be stored in the JWT */
-        return {
-          id: String(user._id),
-          name: user.name,
-          email: user.email,
-          emailVerified: null, // NextAuth expects Date | null
-          role: user.role,     // <-- NEW
-        };
+          const passwordsMatch = await bcrypt.compare(
+            String(credentials.password),
+            user.password
+          );
+          if (!passwordsMatch) {
+            throw new Error("Invalid email or password");
+          }
+
+          // Return the payload that will be stored in the JWT
+          return {
+            id: String(user._id),
+            name: user.name || "",
+            email: user.email,
+            emailVerified: (user as any).emailVerified ?? null,
+            role: user.role || "user",
+          };
+        } catch (err: any) {
+          // Log for server diagnostics, surface a clear message to Auth.js
+          console.error("[auth][authorize] error:", err?.message ?? err);
+          // Re-throw to let Auth.js surface the error (and avoid returning null)
+          throw new Error(err?.message ?? "Authentication error");
+        }
       },
     }),
   ],
 
-  /* ---------------------------------------------
-     Session handling : use JWT instead of the DB
-     --------------------------------------------- */
+  /* Session handling : use JWT */
   session: { strategy: "jwt" },
 
-  /* ---------------------------------------------
-     Encryption / secret handling
-     --------------------------------------------- */
+  /* Encryption / secret handling */
   secret: process.env.AUTH_SECRET,
 
-  /* ---------------------------------------------
-     Custom pages
-     --------------------------------------------- */
+  /* Custom pages */
   pages: { signIn: "/login" },
 
-  /* ---------------------------------------------
-     Callbacks – inject role into JWT & session
-     --------------------------------------------- */
+  /* Callbacks – inject role into JWT & session */
   callbacks: {
     /** Called when a user signs in or the JWT is refreshed */
     async jwt({ token, user }) {
@@ -94,7 +94,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.name = u.name;
         token.email = u.email;
         token.emailVerified = u.emailVerified ?? null;
-        token.role = u.role ?? "user"; // <-- NEW
+        token.role = u.role ?? "user";
       }
       return token;
     },
@@ -107,7 +107,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         name: t.name,
         email: t.email,
         emailVerified: t.emailVerified ?? null,
-        role: t.role ?? "user", // <-- NEW
+        role: t.role ?? "user",
       };
       return session;
     },
