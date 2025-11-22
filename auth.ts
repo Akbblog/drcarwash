@@ -84,3 +84,41 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
 });
+
+// app/auth.ts  (only the changed part is shown, keep the rest untouched)
+
+interface TokenType {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: Date | null;
+  role?: string;      // <-- NEW
+}
+
+// …
+
+callbacks: {
+  async jwt({ token, user }) {
+    if (user) {
+      const u = user as unknown as TokenType & { role?: string }; // ← new cast
+      token.id = u.id;
+      token.name = u.name;
+      token.email = u.email;
+      token.emailVerified = u.emailVerified ?? null;
+      token.role = u.role ?? "user"; // <-- NEW
+    }
+    return token;
+  },
+
+  async session({ session, token }) {
+    const t = token as unknown as TokenType & { role?: string }; // ← new cast
+    session.user = {
+      id: t.id,
+      name: t.name,
+      email: t.email,
+      emailVerified: t.emailVerified ?? null,
+      role: t.role ?? "user", // <-- NEW
+    };
+    return session;
+  },
+},

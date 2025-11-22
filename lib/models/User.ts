@@ -29,6 +29,11 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     sparse: true, // Allows multiple null values
   },
+
+
+
+
+
   // --- SERVICE DETAILS ---
   address: { type: String },
   city: { type: String },
@@ -73,8 +78,16 @@ membershipEnabled: {
   // This helps you prioritize "first come first served"
   // ==========================================================
   
+     // *** NEW FIELD ***
+    role: {
+      type: String,
+      enum: ["user", "editor", "admin"],
+      default: "user",
+    },
+  
 
 }, { timestamps: true });
+
 
 
 
