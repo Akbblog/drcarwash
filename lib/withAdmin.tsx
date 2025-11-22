@@ -1,24 +1,26 @@
 // lib/withAdmin.tsx
+"use client"; // 👈 needed because of hooks
+
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ReactNode } from "react";
 
-export function withAdmin<P>(Component: React.ComponentType<P>) {
+export function withAdmin<P extends {}>(
+  Component: React.ComponentType<P>
+): React.ComponentType<P> {
   return function Wrapped(props: P) {
     const { data: session, status } = useSession();
     const router = useRouter();
 
     if (status === "loading") return <p>Loading…</p>;
 
-    if (!session) {
-      router.push("/login");
+    if (!session?.user) {
+      router.replace("/login");
       return null;
     }
 
-    if (session.user.role !== "admin") {
-      return (
-        <p className="text-red-500">You do not have permission to view this page.</p>
-      );
+    const user = session.user as { role?: string };
+    if (user.role !== "admin") {
+      return <p className="text-red-500">You do not have permission.</p>;
     }
 
     return <Component {...props} />;

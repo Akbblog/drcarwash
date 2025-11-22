@@ -1,50 +1,72 @@
-import mongoose from 'mongoose';
+// lib/db.ts
+import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+/* ─────────────────────────────────────────────────────────────────────
+   1️⃣ Grab the URI from the environment
+   ───────────────────────────────────────────────────────────────────── */
+const MONGODB_URI = process.env.MONGODB_URI as string; // validated below at runtime
 
+/* ─────────────────────────────────────────────────────────────────────
+   If the URI is missing, throw an explicit error
+   ───────────────────────────────────────────────────────────────────── */
 if (!MONGODB_URI) {
   throw new Error(
-    'Please define the MONGODB_URI environment variable inside .env.local'
+    "Please define the MONGODB_URI environment variable in .env.local"
   );
 }
 
-/**
- * Global is used here to maintain a cached connection across hot reloads
- * in development. This prevents connections growing exponentially
- * during API Route usage.
- */
-// @ts-ignore
-let cached = global.mongoose;
+/* ─────────────────────────────────────────────────────────────────────
+   2️⃣ Caching logic (dev hot‑reload friendly)
+   ───────────────────────────────────────────────────────────────────── */
+type Cached = {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+};
 
-if (!cached) {
-  // @ts-ignore
-  cached = global.mongoose = { conn: null, promise: null };
+/* -----  Use a typed reference to the global object  ----- */
+const globalNamespace: any = global as any;
+
+// If we've already stored a connection somewhere in the global
+const cached = (globalNamespace.mongoose as Cached) || {
+  conn: null,
+  promise: null,
+} as Cached;
+
+// Persist the cache on the global object for next reloads
+if (!globalNamespace.mongoose) {
+  globalNamespace.mongoose = cached;
 }
 
-async function connectDB() {
-  if (cached.conn) {
-    return cached.conn;
-  }
+/* ─────────────────────────────────────────────────────────────────────
+   3️⃣  Main connector
+   ───────────────────────────────────────────────────────────────────── */
+export async function connectDB(): Promise<typeof mongoose> {
+  // Use cached connection if available
+  if (cached.conn) return cached.conn;
 
+  // Create the connection promise once
   if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-    };
-
-    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
-      console.log("✅ New connection to MongoDB established");
-      return mongoose;
-    });
+    const opts = { bufferCommands: false };
+    cached.promise = mongoose
+      .connect(MONGODB_URI, opts)
+      .then((instance) => {
+        console.log("✅ New connection to MongoDB established");
+        return instance;
+      });
   }
 
+  // Resolve, cache, return
   try {
     cached.conn = await cached.promise;
-  } catch (e) {
+  } catch (err) {
     cached.promise = null;
-    throw e;
+    throw err;
   }
 
   return cached.conn;
 }
 
+/* ─────────────────────────────────────────────────────────────────────
+   4️⃣ Export the helper conventionally
+   ───────────────────────────────────────────────────────────────────── */
 export default connectDB;
