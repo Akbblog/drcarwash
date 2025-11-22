@@ -53,7 +53,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             throw new Error("User account missing password");
           }
 
-          const passwordsMatch = await bcrypt.compare(String(credentials.password), user.password);
+          // Normalize the incoming password minimally (avoid accidental surrounding whitespace)
+          const incomingPassword = String(credentials.password);
+          const incomingPasswordTrimmed = incomingPassword.trim();
+
+          // Quick check: does stored password look like a bcrypt hash? (starts with $2a/$2b/$2y)
+          if (typeof user.password === "string" && !user.password.startsWith("$2")) {
+            console.warn(`[auth][authorize] stored password for user id=${user._id} does not look like a bcrypt hash`);
+          }
+
+          // First try exact password, then try trimmed version if first fails (covers accidental whitespace)
+          let passwordsMatch = await bcrypt.compare(incomingPassword, user.password);
+          if (!passwordsMatch && incomingPassword !== incomingPasswordTrimmed) {
+            passwordsMatch = await bcrypt.compare(incomingPasswordTrimmed, user.password);
+          }
           if (!passwordsMatch) {
             console.info(`[auth][authorize] invalid password attempt for user id=${user._id}`);
             throw new Error("Invalid email or password");
