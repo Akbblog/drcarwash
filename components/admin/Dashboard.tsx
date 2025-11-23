@@ -22,6 +22,7 @@ export function Dashboard() {
   });
 
   const [users, setUsers] = useState<any[]>([]);
+  const [cars, setCars] = useState<any[]>([]);
 
   // UI state for user CRUD
   const [editingUser, setEditingUser] = useState<any | null>(null);
@@ -39,13 +40,15 @@ export function Dashboard() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [statsRes, usersRes] = await Promise.all([
+        const [statsRes, usersRes, carsRes] = await Promise.all([
           fetch("/api/admin/stats"),
           fetch("/api/admin/users"),
+          fetch("/api/admin/cars"),
         ]);
 
         setStats(await statsRes.json());
         setUsers(await usersRes.json());
+        setCars(await carsRes.json());
       } catch (err) {
         console.error("Failed loading admin data", err);
       }
@@ -61,6 +64,17 @@ export function Dashboard() {
       setUsers(data);
     } catch (err) {
       console.error("Failed to refresh users", err);
+    }
+  }
+
+  // helper to refresh cars
+  async function refreshCars() {
+    try {
+      const res = await fetch("/api/admin/cars");
+      const data = await res.json();
+      setCars(data);
+    } catch (err) {
+      console.error("Failed to refresh cars", err);
     }
   }
 
@@ -348,6 +362,39 @@ export function Dashboard() {
                             <strong>Stripe ID:</strong> {u.stripeCustomerId}
                           </div>
                         )}
+
+                        {/* User's cars as compact chips */}
+                        {(() => {
+                          const userId = u.id ?? u._id;
+                          const userCars = cars.filter((c) => {
+                            const owner = c.userId ?? (c.user && (c.user.id ?? c.user._id));
+                            try {
+                              return String(owner) === String(userId);
+                            } catch (e) {
+                              return false;
+                            }
+                          });
+
+                          if (userCars.length === 0) return null;
+
+                          return (
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              {userCars.slice(0, 3).map((car) => (
+                                <div
+                                  key={car.id ?? car._id}
+                                  className="text-xs px-2 py-1 bg-white/6 rounded"
+                                  title={car.vin || car.plate || `${car.make ?? ""} ${car.model ?? ""}`}
+                                >
+                                  {car.make || car.plate ? `${car.make ?? ""} ${car.model ?? ""}`.trim() : car.plate ?? car.vin ?? "Car"}
+                                </div>
+                              ))}
+
+                              {userCars.length > 3 && (
+                                <div className="text-xs px-2 py-1 bg-[var(--accent)] text-white rounded">+{userCars.length - 3} more</div>
+                              )}
+                            </div>
+                          );
+                        })()}
                       </div>
                     </div>
 
