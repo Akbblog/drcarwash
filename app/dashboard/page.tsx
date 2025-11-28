@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
 
 async function getDashboardData(userId: string) {
   await connectDB();
-  
+
 
   const [user, cars] = await Promise.all([
     User.findById(userId)
@@ -65,10 +65,10 @@ export default async function Dashboard() {
   // GET MEMBERSHIP TOGGLE VALUE
   const membershipEnabled = (user as any).membershipEnabled === true;
 
-  
+
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] p-6 md:p-12">
+    <main className="min-h-screen bg-[#0a0a0a] p-6 md:p-12 pt-24">
       <div className="max-w-[1400px] mx-auto">
 
         {/* Header */}
@@ -92,13 +92,12 @@ export default async function Dashboard() {
 
             {/* MEMBERSHIP STATUS CARD */}
             <div
-              className={`p-8 rounded-xl border ${
-                isSubscribed
+              className={`p-8 rounded-xl border ${isSubscribed
                   ? 'bg-[#ff3366]/10 border-[#ff3366]/30'
                   : isWaitlisted
                     ? 'bg-yellow-500/10 border-yellow-500/20'  // ⭐ WAITLIST COLOR
                     : 'bg-[#111] border-white/5'
-              }`}
+                }`}
             >
               <h3 className="text-white uppercase font-bold mb-4 flex items-center">
                 MEMBERSHIP STATUS
@@ -113,59 +112,59 @@ export default async function Dashboard() {
                   <span className="ml-2 inline-block w-2 h-2 bg-yellow-500 rounded-full animate-pulse" />
                 )}
               </h3>
-              
+
 
               {/* ⭐ ACTIVE → WAITLISTED → INACTIVE */}
-                {isSubscribed ? (
-                  // ⭐ ACTIVE VIEW
-                  <div>
-                    <div className="text-2xl font-black text-[#ff3366] mb-2">
-                      ACTIVE
-                    </div>
-                    <p className="text-[#999] text-sm">
-                      Your premium membership is active — your bi-weekly service is secured.
-                    </p>
+              {isSubscribed ? (
+                // ⭐ ACTIVE VIEW
+                <div>
+                  <div className="text-2xl font-black text-[#ff3366] mb-2">
+                    ACTIVE
                   </div>
+                  <p className="text-[#999] text-sm">
+                    Your premium membership is active — your bi-weekly service is secured.
+                  </p>
+                </div>
 
-                ) : isWaitlisted ? (
-                  // ⭐ WAITLISTED VIEW
-                  <div>
-                    <div className="text-2xl font-black text-yellow-500 mb-2">
-                      WAITLISTED
-                    </div>
+              ) : isWaitlisted ? (
+                // ⭐ WAITLISTED VIEW
+                <div>
+                  <div className="text-2xl font-black text-yellow-500 mb-2">
+                    WAITLISTED
+                  </div>
+                  <p className="text-[#999] text-sm mb-6">
+                    You’re on our priority waitlist. We’ll notify you as soon as a membership spot opens.
+                  </p>
+
+                  <button
+                    className="w-full py-4 bg-yellow-600 text-white font-bold uppercase tracking-widest text-sm opacity-60 cursor-not-allowed"
+                    disabled
+                  >
+                    JOINED WAITLIST
+                  </button>
+                </div>
+
+              ) : (
+                // ⭐ NORMAL INACTIVE VIEW
+                <div>
+                  <div className="text-white/50 mb-6">INACTIVE</div>
+
+                  {membershipEnabled ? (
                     <p className="text-[#999] text-sm mb-6">
-                      You’re on our priority waitlist. We’ll notify you as soon as a membership spot opens.
+                      Your membership is enabled — activate to begin services.
                     </p>
+                  ) : (
+                    <p className="text-[#999] text-sm mb-6">
+                      Unlock your membership to enjoy premium bi-weekly detailing services.
+                    </p>
+                  )}
 
-                    <button
-                      className="w-full py-4 bg-yellow-600 text-white font-bold uppercase tracking-widest text-sm opacity-60 cursor-not-allowed"
-                      disabled
-                    >
-                      JOINED WAITLIST
-                    </button>
-                  </div>
-
-                ) : (
-                  // ⭐ NORMAL INACTIVE VIEW
-                  <div>
-                    <div className="text-white/50 mb-6">INACTIVE</div>
-
-                    {membershipEnabled ? (
-                      <p className="text-[#999] text-sm mb-6">
-                        Your membership is enabled — activate to begin services.
-                      </p>
-                    ) : (
-                      <p className="text-[#999] text-sm mb-6">
-                        Unlock your membership to enjoy premium bi-weekly detailing services.
-                      </p>
-                    )}
-
-                    <SubscribeButton />
-                  </div>
-                )}
+                  <SubscribeButton />
+                </div>
+              )}
 
 
-          
+
             </div>
 
             <AddressForm userData={userData} />

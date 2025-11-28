@@ -39,7 +39,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-6 relative overflow-hidden">
+    <main className="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-6 pt-24 relative overflow-hidden">
       <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_bottom_left,_rgba(255,51,102,0.1),_transparent_50%)]"></div>
 
       <div className="w-full max-w-md bg-[#111] p-10 rounded-xl border border-white/5 relative z-10 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
