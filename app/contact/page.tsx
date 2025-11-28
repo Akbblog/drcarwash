@@ -85,7 +85,7 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] p-6 md:p-12 pt-24">
+    <main className="min-h-screen bg-[#0a0a0a] p-6 md:p-12 pt-32 md:pt-36">
       <div className="max-w-[900px] mx-auto">
         {/* HEADER */}
         <div className="flex flex-wrap justify-between items-end mb-12 pb-6 border-b border-white/10">
@@ -94,7 +94,7 @@ export default function ContactPage() {
               Contact <span className="text-[#ff3366]">Support</span>
             </h1>
             <p className="text-[#999] uppercase tracking-widest text-sm">
-              We’re here to help — reach out anytime
+              We're here to help — reach out anytime
             </p>
           </div>
         </div>
@@ -223,7 +223,7 @@ export default function ContactPage() {
           >
             {status === "success" && (
               <p className="text-green-400 text-sm mt-4 animate-fadeIn">
-                ✓ Your message has been sent. We’ll get back to you shortly.
+                ✓ Your message has been sent. We'll get back to you shortly.
               </p>
             )}
             {status === "error" && (

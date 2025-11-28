@@ -68,7 +68,7 @@ export default async function Dashboard() {
 
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] p-6 md:p-12 pt-24">
+    <main className="min-h-screen bg-[#0a0a0a] p-6 md:p-12 pt-32 md:pt-36">
       <div className="max-w-[1400px] mx-auto">
 
         {/* Header */}
