@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import AuthProvider from "./SessionProvider"; // ← USE ONLY THIS
+import SessionProvider from "@/app/SessionProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,22 +11,18 @@ export const metadata: Metadata = {
   description: "We wash, you relax. Bi-weekly car care subscription.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} antialiased bg-[#0a0a0a] text-white`}>
-        
-        {/* ONE global session provider */}
-        <AuthProvider>
+      <body className={`${inter.className} antialiased bg-[#0a0a0a] text-white`} suppressHydrationWarning>
+        <SessionProvider>
           <Navbar />
-
-          <div className="pt-[80px] min-h-[calc(100vh-1px)] flex flex-col justify-between">
-            <div>{children}</div>
-            <Footer />
-          </div>
-        </AuthProvider>
-
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );

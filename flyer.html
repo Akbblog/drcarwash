@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Car Wash Flyer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-[#171717] min-h-screen flex flex-col items-center justify-center p-4 gap-8">
+
+    <!-- Flyer Container -->
+    <div id="flyer"
+        class="relative w-[500px] h-[500px] bg-black overflow-hidden shadow-2xl flex flex-col items-center justify-between p-8 text-center group"
+        style="border: 1px solid rgba(255,255,255,0.1);">
+
+        <!-- Background Effects -->
+        <div class="absolute inset-0 opacity-50 transition-opacity duration-500 hover:opacity-70"
+            style="background: radial-gradient(circle at center, rgba(255,51,102,0.2), transparent, transparent);">
+        </div>
+        <div class="absolute top-0 left-0 w-full h-1"
+            style="background: linear-gradient(90deg, transparent, #ff3366, transparent);"></div>
+        <div class="absolute bottom-0 left-0 w-full h-1"
+            style="background: linear-gradient(90deg, transparent, #ff3366, transparent);"></div>
+
+        <!-- Header -->
+        <div class="relative z-10 mt-4">
+            <h3 class="text-[rgba(255,255,255,0.6)] text-xs tracking-[0.3em] uppercase mb-2">Premium Doorstep Service
+            </h3>
+            <h1 class="text-2xl font-bold text-white tracking-wider uppercase">
+                Family <span class="text-[#ff3366]">Car Wash</span>
+            </h1>
+        </div>
+
+        <!-- Main Content -->
+        <div class="relative z-10 flex flex-col items-center justify-center flex-1">
+            <div class="relative transform transition-transform duration-700 ease-out scale-100 opacity-100">
+                <div class="text-[120px] font-black text-white leading-none tracking-tighter"
+                    style="text-shadow: 0 0 40px rgba(255,51,102,0.3);">
+                    60
+                </div>
+                <div class="absolute -top-4 -right-8 rotate-12 bg-[#ff3366] text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg"
+                    style="border: 1px solid rgba(255,255,255,0.2);">
+                    LIMITED
+                </div>
+            </div>
+
+            <h2 class="text-3xl font-bold text-white uppercase tracking-widest mt-2 mb-1">
+                Slots <span class="text-transparent bg-clip-text"
+                    style="background-image: linear-gradient(90deg, #ffffff, rgba(255,255,255,0.5)); -webkit-background-clip: text;">Only</span>
+            </h2>
+
+            <div class="w-12 h-1 bg-[#ff3366] rounded-full my-6"></div>
+
+            <p class="text-[#9ca3af] text-sm max-w-[80%] leading-relaxed">
+                Join our exclusive bi-weekly detailing route.
+                Once they're gone, they're gone.
+            </p>
+        </div>
+
+        <!-- QR Code - Bottom Left -->
+        <div
+            class="absolute bottom-6 left-6 z-20 bg-white p-1.5 rounded-md shadow-lg rotate-3 hover:rotate-0 transition-transform duration-300">
+            <!-- Note: Ensure qr.png is in the same directory or provide a full URL -->
+            <img src="public/images/qr.png" alt="Scan" class="w-14 h-14 object-contain">
+        </div>
+
+        <!-- Footer / CTA -->
+        <div class="relative z-10 w-full mb-4 flex flex-col items-center gap-4">
+            <div class="w-full max-w-[280px]">
+                <!-- Static Button for HTML Version -->
+                <a href="https://familycarwash.com/register" target="_blank"
+                    class="block w-full py-4 bg-[#ff3366] text-white font-bold uppercase tracking-widest text-sm hover:bg-[#ff1149] hover:shadow-[0_10px_30px_rgba(255,51,102,0.3)] transition-all text-center no-underline">
+                    ACTIVATE PLAN ($349/mo)
+                </a>
+                <p class="text-[rgba(255,255,255,0.4)] text-[10px] tracking-wider mt-2 uppercase">
+                    Click to Secure
+                </p>
+            </div>
+        </div>
+
+        <!-- Decorative Corners -->
+        <div class="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2" style="border-color: rgba(255,255,255,0.2);">
+        </div>
+        <div class="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2" style="border-color: rgba(255,255,255,0.2);">
+        </div>
+        <div class="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2"
+            style="border-color: rgba(255,255,255,0.2);"></div>
+    </div>
+
+    <!-- Download Button -->
+    <button id="downloadBtn" onclick="downloadPDF()"
+        class="px-8 py-3 bg-white text-black font-bold uppercase tracking-widest text-sm rounded-full hover:bg-gray-200 transition-colors flex items-center gap-2 cursor-pointer">
+        Download PDF
+    </button>
+
+    <script>
+        async function downloadPDF() {
+            const btn = document.getElementById('downloadBtn');
+            const originalText = btn.innerText;
+            btn.innerText = 'Generating PDF...';
+            btn.disabled = true;
+
+            try {
+                const element = document.getElementById('flyer');
+
+                // Wait for images
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    background: "transparent",
+                    logging: false
+                });
+
+                const imgData = canvas.toDataURL("image/png");
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: "portrait",
+                    unit: "px",
+                    format: [500, 500]
+                });
+
+                pdf.addImage(imgData, "PNG", 0, 0, 500, 500);
+                pdf.save("family-car-wash-flyer.pdf");
+            } catch (error) {
+                console.error(error);
+                alert('Failed to generate PDF. Check console for details.');
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+
+</html>

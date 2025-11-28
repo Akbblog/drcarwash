@@ -56,7 +56,7 @@ export default function SubscribeButton() {
       disabled={loading}
       className="w-full py-4 bg-[#ff3366] text-white font-bold uppercase tracking-widest text-sm hover:bg-[#ff1149] hover:shadow-[0_10px_30px_rgba(255,51,102,0.3)] transition-all disabled:opacity-50"
     >
-      {loading ? "INITIALIZING..." : "ACTIVATE PLAN ($249/mo)"}
+      {loading ? "INITIALIZING..." : "ACTIVATE PLAN ($349/mo)"}
     </button>
   );
 }

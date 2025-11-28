@@ -1,9 +1,10 @@
 // src/app/admin/Dashboard.tsx
 "use client";
 
-import { useState, useEffect, FormEvent } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useState, useEffect, FormEvent, Fragment } from "react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import SignOutButton from "@/components/SignOutButton";
 
 // small helper to safely read optional props or provide a fallback
 const propsOr = <T,>(v: T | undefined, fallback: T): T => (typeof v === "undefined" ? fallback : v);
@@ -30,6 +31,11 @@ type User = {
   isSubscribed?: boolean;
   stripeCustomerId?: string;
   createdAt?: string;
+  updatedAt?: string;
+  waitlistStatus?: "none" | "joined";
+  waitlistJoinedAt?: string;
+  authProvider?: string;
+  image?: string;
 };
 
 type Car = {
@@ -81,11 +87,9 @@ const Toast = ({ message, type = "success", onClose }: ToastProps) => {
 /* ---------------------- Stat Card --------------------------------- */
 type StatProps = { label: string; value: number | string };
 const StatCard = ({ label, value }: StatProps) => (
-  <div className="rounded-md bg-white dark:bg-gray-800 p-4 shadow-sm border border-gray-200 dark:border-gray-700 text-center">
-    <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{label}</p>
-    <p className="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">
-      {value}
-    </p>
+  <div className="rounded-xl bg-[#111] border border-white/5 p-6 text-center">
+    <p className="text-xs font-bold text-[#999] uppercase tracking-widest">{label}</p>
+    <p className="mt-2 text-2xl font-black text-white">{value}</p>
   </div>
 );
 
@@ -352,6 +356,8 @@ type UserModalProps = {
   carsTotalPages?: number;
   setCarsPage?: React.Dispatch<React.SetStateAction<number>>;
   refreshCars?: (page?: number) => Promise<void>;
+  showToast?: (msg: string, type?: "success" | "error") => void;
+  askConfirm?: (message: string, onConfirm: () => Promise<void>) => void;
 };
 const UserModal = ({
   user,
@@ -367,6 +373,8 @@ const UserModal = ({
   carsTotalPages,
   setCarsPage,
   refreshCars,
+  showToast = () => {},
+  askConfirm = () => {},
 }: UserModalProps) => {
   const [carForm, setCarForm] = useState({
     make: "",
@@ -389,11 +397,11 @@ const UserModal = ({
 
   const handleAddCar = async () => {
     if (!carForm.make || !carForm.model || !carForm.licensePlate) {
-      alert("Make, model and license plate are required");
+      showToast("Make, model and license plate are required", "error");
       return;
     }
     if (!ownerId) {
-      alert("Missing user id");
+      showToast("Missing user id", "error");
       return;
     }
     setCarLoading(true);
@@ -402,7 +410,7 @@ const UserModal = ({
       setCarForm({ make: "", model: "", licensePlate: "", color: "" });
     } catch (e) {
       console.error(e);
-      alert((e as any).message ?? "Failed to add car");
+      showToast((e as any).message ?? "Failed to add car", "error");
     }
     setCarLoading(false);
   };
@@ -721,17 +729,32 @@ const UserModal = ({
 type UserTableProps = {
   users: User[];
   cars: Car[];
-  onEditUser: (u: User) => void;
   onDeleteUser: (id: string) => void;
-  onExpandUser: (u: User) => void;
+  createCar: (payload: CarPayload) => Promise<void>;
+  deleteCar: (id: string) => Promise<void>;
+  refreshUsers: (page?: number) => Promise<void>;
+  expandedUserId?: string | null;
+  onToggleExpand?: (id: string) => void;
+  onRequestDeleteCar?: (id: string) => void;
+  showToast?: (msg: string, type?: "success" | "error") => void;
+  askConfirm?: (message: string, onConfirm: () => Promise<void>) => void;
 };
 const UserTable = ({
   users,
   cars,
-  onEditUser,
   onDeleteUser,
-  onExpandUser,
+  createCar,
+  deleteCar,
+  refreshUsers,
+  expandedUserId,
+  onToggleExpand,
+  onRequestDeleteCar,
+  showToast = () => {},
+  askConfirm = () => {},
 }: UserTableProps) => {
+  const [saving, setSaving] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+
   // Build a map of userId → car count for fast lookup
   const carCountMap = new Map<string, number>();
   cars.forEach((c) => {
@@ -743,127 +766,755 @@ const UserTable = ({
     carCountMap.set(key, (carCountMap.get(key) ?? 0) + 1);
   });
 
-  const iconBtn = (
-    className: string,
-    aria: string,
-    onClick: () => void,
-    icon: React.ReactNode,
-  ) => (
-    <button
-      onClick={onClick}
-      className={className}
-      aria-label={aria}
-      type="button"
-    >
-      {icon}
-    </button>
-  );
+  // Get expanded user's form data
+  const expandedUser = expandedUserId ? users.find(u => String(u.id ?? u._id!) === expandedUserId) : null;
+  const [form, setForm] = useState<any>(expandedUser ? {
+    name: expandedUser.name || "",
+    email: expandedUser.email || "",
+    phone: expandedUser.phone || "",
+    address: expandedUser.address || "",
+    city: expandedUser.city || "",
+    zip: expandedUser.zip || "",
+    notes: expandedUser.notes || "",
+    preferredDay1: expandedUser.preferredDay1 || "",
+    preferredTime1: expandedUser.preferredTime1 || "",
+    preferredDay2: expandedUser.preferredDay2 || "",
+    preferredTime2: expandedUser.preferredTime2 || "",
+    membershipEnabled: !!expandedUser.membershipEnabled,
+    isSubscribed: !!expandedUser.isSubscribed,
+    role: expandedUser.role || "user",
+  } : {});
+
+  // Update form when expandedUser changes
+  useEffect(() => {
+    if (expandedUser) {
+      setForm({
+        name: expandedUser.name || "",
+        email: expandedUser.email || "",
+        phone: expandedUser.phone || "",
+        address: expandedUser.address || "",
+        city: expandedUser.city || "",
+        zip: expandedUser.zip || "",
+        notes: expandedUser.notes || "",
+        preferredDay1: expandedUser.preferredDay1 || "",
+        preferredTime1: expandedUser.preferredTime1 || "",
+        preferredDay2: expandedUser.preferredDay2 || "",
+        preferredTime2: expandedUser.preferredTime2 || "",
+        membershipEnabled: !!expandedUser.membershipEnabled,
+        isSubscribed: !!expandedUser.isSubscribed,
+        role: expandedUser.role || "user",
+      });
+      setShowDetails(false);
+    }
+  }, [expandedUser]);
+
+  const ownedCars = expandedUser ? cars.filter((c) => {
+    const raw = c.userId ?? c.user ?? null;
+    let id = raw;
+    if (raw && typeof raw === "object") id = (raw as any)._id ?? (raw as any).id ?? raw;
+    return String(id) === String(expandedUser.id ?? expandedUser._id!);
+  }) : [];
+
+  const save = async () => {
+    if (!expandedUser) return;
+    setSaving(true);
+    try {
+      const id = expandedUser.id ?? expandedUser._id!;
+      const r = await fetch(`/api/admin/users/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!r.ok) throw new Error(await r.text());
+      await refreshUsers();
+      onToggleExpand && onToggleExpand("");
+      showToast("User updated", "success");
+    } catch (e) {
+      console.error(e);
+      showToast((e as any)?.message ?? "Failed to save", "error");
+    }
+    setSaving(false);
+  };
+
+  // Car add form
+  const [carForm, setCarForm] = useState({ make: "", model: "", licensePlate: "", color: "" });
+  const [carLoading, setCarLoading] = useState(false);
+  const handleAddCar = async () => {
+    if (!carForm.make || !carForm.model || !carForm.licensePlate) {
+      showToast("Make, model and license plate are required", "error");
+      return;
+    }
+    if (!expandedUser) return showToast("Missing user", "error");
+    setCarLoading(true);
+    try {
+      await createCar({ ...carForm, userId: String(expandedUser.id ?? expandedUser._id!) });
+      setCarForm({ make: "", model: "", licensePlate: "", color: "" });
+      showToast("Car added", "success");
+    } catch (e) {
+      console.error(e);
+      showToast((e as any)?.message ?? "Failed to add car", "error");
+    }
+    setCarLoading(false);
+  };
+
+  const inputCls = "w-full bg-black border border-white/10 px-3 py-2 text-white text-xs rounded";
+  const labelCls = "text-[10px] text-[#999] uppercase tracking-widest mb-1 block";
+
+  const formatDate = (d?: string) => {
+    if (!d) return "—";
+    try {
+      return new Date(d).toLocaleDateString();
+    } catch {
+      return d;
+    }
+  };
 
   return (
-    <div className="overflow-x-auto rounded-md border border-gray-200 dark:border-gray-700">
+    <div className="overflow-x-auto rounded-md border border-white/10">
       <table className="w-full table-auto text-sm">
-        <thead className="bg-gray-100 dark:bg-gray-800">
+        <thead className="bg-[#111] border-b border-white/10">
           <tr>
-            <th className="p-2 text-left font-medium text-gray-600 dark:text-gray-300">
+            <th className="p-3 text-left font-medium text-[#999] uppercase tracking-widest text-xs">
               Name
             </th>
-            <th className="p-2 text-left font-medium text-gray-600 dark:text-gray-300">
+            <th className="p-3 text-left font-medium text-[#999] uppercase tracking-widest text-xs">
               Email
             </th>
-            <th className="p-2 text-center font-medium text-gray-600 dark:text-gray-300">
+            <th className="p-3 text-center font-medium text-[#999] uppercase tracking-widest text-xs">
               Role
             </th>
-            <th className="p-2 text-center font-medium text-gray-600 dark:text-gray-300">
+            <th className="p-3 text-center font-medium text-[#999] uppercase tracking-widest text-xs">
               Cars
             </th>
-            <th className="p-2 text-center font-medium text-gray-600 dark:text-gray-300">
+            <th className="p-3 text-center font-medium text-[#999] uppercase tracking-widest text-xs">
               Actions
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody className="divide-y divide-white/5">
           {users.map((u) => {
-            const uid = u.id ?? u._id!;
-            const carCount = carCountMap.get(String(uid)) ?? 0;
+            const uid = String(u.id ?? u._id!);
+            const carCount = carCountMap.get(uid) ?? 0;
+            const isExpanded = expandedUserId === uid;
             return (
-              <tr key={uid} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                <td className="p-2 font-medium text-gray-900 dark:text-gray-100">
-                  {u.name ?? "—"}
-                </td>
-                <td className="p-2 text-gray-600 dark:text-gray-300">{u.email}</td>
-                <td className="p-2 text-center text-gray-600 dark:text-gray-300">
-                  {u.role}
-                </td>
-                <td className="p-2 text-center text-gray-600 dark:text-gray-300">
-                  {carCount}
-                </td>
-                <td className="p-2 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    {/* Edit – opens compact edit modal */}
-                    {iconBtn(
-                      "rounded bg-gray-200 dark:bg-gray-700 p-1 hover:bg-gray-300 dark:hover:bg-gray-600",
-                      "Edit user",
-                      () => onEditUser(u),
-                      <svg
-                        className="h-4 w-4 text-gray-600 dark:text-gray-300"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+              <Fragment key={uid}>
+                <tr className="bg-[#0a0a0a] hover:bg-[#111] transition-colors">
+                  <td className="p-3 font-medium text-white">
+                    {u.name ?? "—"}
+                  </td>
+                  <td className="p-3 text-white/70">{u.email}</td>
+                  <td className="p-3 text-center text-white/70">
+                    {u.role}
+                  </td>
+                  <td className="p-3 text-center text-white/70">
+                    {carCount}
+                  </td>
+                  <td className="p-3 text-center">
+                    <div className="flex items-center justify-center gap-2">
+                      <button
+                        onClick={() => onToggleExpand && onToggleExpand(uid)}
+                        className="rounded bg-[#ff3366] px-3 py-1 text-xs text-white hover:bg-[#ff1149] transition-colors font-medium"
                       >
-                        <path d="M12 20h9" />
-                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-                      </svg>,
-                    )}
+                        {isExpanded ? "Hide" : "Manage"}
+                      </button>
+                      <button
+                        onClick={() => onDeleteUser(uid)}
+                        className="rounded bg-red-600/20 border border-red-600/50 px-3 py-1 text-xs text-red-300 hover:bg-red-600/30 transition-colors font-medium"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
 
-                    {/* Expand – opens full‑screen modal */}
-                    {iconBtn(
-                      "rounded bg-[var(--accent)] p-1 text-white hover:opacity-90",
-                      "Expand user",
-                      () => onExpandUser(u),
-                      <svg
-                        className="h-4 w-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <circle cx="12" cy="12" r="3" />
-                        <path d="M2 12h3m6-9v3m6 12h3m-12-6h12" />
-                      </svg>,
-                    )}
+                {/* Expanded row – inline below user */}
+                {isExpanded && expandedUser && (
+                  <tr className="bg-[#111] border-t border-white/10">
+                    <td colSpan={5} className="p-6">
+                      <div className="space-y-4 max-w-4xl">
+                        {/* Location & Contact */}
+                        <div className="space-y-3">
+                          <h4 className="text-xs font-bold text-white uppercase tracking-widest">Location & Contact</h4>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            <div>
+                              <label className={labelCls}>Name</label>
+                              <input value={form.name} onChange={(e) => setForm((s: any) => ({ ...s, name: e.target.value }))} placeholder="Full name" className={inputCls} />
+                            </div>
+                            <div>
+                              <label className={labelCls}>Email</label>
+                              <input value={form.email} onChange={(e) => setForm((s: any) => ({ ...s, email: e.target.value }))} placeholder="user@example.com" className={inputCls} />
+                            </div>
+                            <div>
+                              <label className={labelCls}>Phone</label>
+                              <input value={form.phone} onChange={(e) => setForm((s: any) => ({ ...s, phone: e.target.value }))} placeholder="(555) 123-4567" className={inputCls} />
+                            </div>
+                            <div>
+                              <label className={labelCls}>Street Address</label>
+                              <input value={form.address} onChange={(e) => setForm((s: any) => ({ ...s, address: e.target.value }))} placeholder="123 Main St" className={inputCls} />
+                            </div>
+                            <div>
+                              <label className={labelCls}>City</label>
+                              <input value={form.city} onChange={(e) => setForm((s: any) => ({ ...s, city: e.target.value }))} placeholder="City" className={inputCls} />
+                            </div>
+                            <div>
+                              <label className={labelCls}>ZIP Code</label>
+                              <input value={form.zip} onChange={(e) => setForm((s: any) => ({ ...s, zip: e.target.value }))} placeholder="12345" className={inputCls} />
+                            </div>
+                          </div>
+                        </div>
 
-                    {/* Delete */}
-                    {iconBtn(
-                      "rounded bg-red-600 p-1 text-white hover:bg-red-700",
-                      "Delete user",
-                      () => onDeleteUser(uid),
-                      <svg
-                        className="h-4 w-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="3 6 5 6 21 6" />
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                        <line x1="10" y1="11" x2="10" y2="17" />
-                        <line x1="14" y1="11" x2="14" y2="17" />
-                      </svg>,
-                    )}
-                  </div>
-                </td>
-              </tr>
+                        {/* Step 2: Scheduling & Membership */}
+                        <div className="space-y-3 pt-4 border-t border-white/10">
+                          <h4 className="text-xs font-bold text-white uppercase tracking-widest">Step 2: Scheduling & Membership</h4>
+                          <div>
+                            <label className={labelCls}>Service Notes</label>
+                            <textarea value={form.notes} onChange={(e) => setForm((s: any) => ({ ...s, notes: e.target.value }))} placeholder="Any special notes..." rows={2} className={inputCls} />
+                          </div>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div>
+                              <label className={labelCls}>Preferred Day 1</label>
+                              <input value={form.preferredDay1} onChange={(e) => setForm((s: any) => ({ ...s, preferredDay1: e.target.value }))} placeholder="Monday" className={inputCls} />
+                            </div>
+                            <div>
+                              <label className={labelCls}>Preferred Time 1</label>
+                              <input value={form.preferredTime1} onChange={(e) => setForm((s: any) => ({ ...s, preferredTime1: e.target.value }))} placeholder="9:00 AM" className={inputCls} />
+                            </div>
+                            <div>
+                              <label className={labelCls}>Preferred Day 2</label>
+                              <input value={form.preferredDay2} onChange={(e) => setForm((s: any) => ({ ...s, preferredDay2: e.target.value }))} placeholder="Wednesday" className={inputCls} />
+                            </div>
+                            <div>
+                              <label className={labelCls}>Preferred Time 2</label>
+                              <input value={form.preferredTime2} onChange={(e) => setForm((s: any) => ({ ...s, preferredTime2: e.target.value }))} placeholder="2:00 PM" className={inputCls} />
+                            </div>
+                          </div>
+                          <div className="flex gap-4 pt-2">
+                            <label className="flex items-center gap-2 text-xs text-white cursor-pointer">
+                              <input type="checkbox" checked={form.membershipEnabled} onChange={(e) => setForm((s: any) => ({ ...s, membershipEnabled: e.target.checked }))} className="w-3 h-3" />
+                              <span>Membership Enabled</span>
+                            </label>
+                            <label className="flex items-center gap-2 text-xs text-white cursor-pointer">
+                              <input type="checkbox" checked={form.isSubscribed} onChange={(e) => setForm((s: any) => ({ ...s, isSubscribed: e.target.checked }))} className="w-3 h-3" />
+                              <span>Is Subscribed</span>
+                            </label>
+                          </div>
+                        </div>
+
+                        {/* Step 3: Account & Cars */}
+                        <div className="space-y-3 pt-4 border-t border-white/10">
+                          <div className="flex items-center justify-between">
+                            <h4 className="text-xs font-bold text-white uppercase tracking-widest">Step 3: Account & Cars</h4>
+                            <button onClick={() => setShowDetails(!showDetails)} className="text-xs text-[#ff3366] hover:text-white">
+                              {showDetails ? "Hide" : "View"} Details
+                            </button>
+                          </div>
+
+                          {showDetails && (
+                            <div className="text-xs text-white/60 space-y-1 p-3 bg-black/30 rounded">
+                              <div><strong>Role:</strong> {form.role}</div>
+                              <div><strong>Created:</strong> {formatDate(expandedUser.createdAt)}</div>
+                              <div><strong>Updated:</strong> {formatDate(expandedUser.updatedAt)}</div>
+                              <div><strong>Auth Provider:</strong> {expandedUser.authProvider || "credentials"}</div>
+                            </div>
+                          )}
+
+                          <div>
+                            <label className={labelCls}>User Role</label>
+                            <select value={form.role} onChange={(e) => setForm((s: any) => ({ ...s, role: e.target.value }))} className={inputCls}>
+                              <option value="user">User</option>
+                              <option value="editor">Editor</option>
+                              <option value="admin">Admin</option>
+                            </select>
+                          </div>
+
+                          {/* Cars */}
+                          <div>
+                            <label className={labelCls}>Owned Cars ({ownedCars.length})</label>
+                            <div className="space-y-2 mb-3">
+                              {ownedCars.length > 0 ? (
+                                ownedCars.map((c) => (
+                                  <div key={String(c.id ?? c._id)} className="flex items-center justify-between bg-black/40 p-2 rounded text-xs">
+                                    <div>
+                                      <div className="font-medium text-white">{c.make} {c.model}</div>
+                                      <div className="text-white/60">{c.licensePlate}{c.color ? ` • ${c.color}` : ""}</div>
+                                    </div>
+                                    <button onClick={() => onRequestDeleteCar && onRequestDeleteCar(String(c.id ?? c._id))} className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:opacity-90">
+                                      Remove
+                                    </button>
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="text-xs text-white/50 italic">No cars registered</div>
+                              )}
+                            </div>
+
+                            {/* Add Car */}
+                            <div className="space-y-2 pt-2 border-t border-white/10">
+                              <label className={labelCls}>Add New Car</label>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                <input placeholder="Make" value={carForm.make} onChange={(e) => setCarForm(s => ({ ...s, make: e.target.value }))} className={inputCls} />
+                                <input placeholder="Model" value={carForm.model} onChange={(e) => setCarForm(s => ({ ...s, model: e.target.value }))} className={inputCls} />
+                                <input placeholder="License Plate" value={carForm.licensePlate} onChange={(e) => setCarForm(s => ({ ...s, licensePlate: e.target.value }))} className={inputCls} />
+                                <input placeholder="Color" value={carForm.color} onChange={(e) => setCarForm(s => ({ ...s, color: e.target.value }))} className={inputCls} />
+                              </div>
+                              <button onClick={handleAddCar} disabled={carLoading} className="w-full px-3 py-2 bg-[var(--accent)] text-white rounded text-xs font-medium hover:opacity-90 disabled:opacity-50">
+                                {carLoading ? "Adding..." : "Add Car"}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Save/Cancel */}
+                        <div className="flex gap-3 pt-4 border-t border-white/10">
+                          <button onClick={save} disabled={saving} className="flex-1 px-3 py-2 bg-white text-black rounded font-semibold text-xs hover:opacity-90 disabled:opacity-50">
+                            {saving ? "Saving..." : "Save Changes"}
+                          </button>
+                          <button onClick={() => onToggleExpand && onToggleExpand("")} className="flex-1 px-3 py-2 border border-white/10 text-white rounded text-xs hover:bg-white/5">
+                            Close
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </Fragment>
             );
           })}
         </tbody>
       </table>
+    </div>
+  );
+};
+
+/* ---------------------- User Card (Comprehensive Admin View) ---------------------- */
+type UserCardProps = {
+  user: User;
+  cars: Car[];
+  carCount: number;
+  onDeleteUser: (id: string) => void;
+  createCar: (payload: CarPayload) => Promise<void>;
+  deleteCar: (id: string) => Promise<void>;
+  refreshUsers: (page?: number) => Promise<void>;
+  isOpen?: boolean;
+  onToggle?: () => void;
+  onRequestDeleteCar?: (id: string) => void;
+  showToast?: (msg: string, type?: "success" | "error") => void;
+};
+
+const UserCard = ({ 
+  user, 
+  cars, 
+  carCount, 
+  onDeleteUser, 
+  createCar, 
+  deleteCar, 
+  refreshUsers, 
+  isOpen = false, 
+  onToggle, 
+  onRequestDeleteCar, 
+  showToast = () => {} 
+}: UserCardProps) => {
+  const [saving, setSaving] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const [form, setForm] = useState<any>({
+    name: user.name || "",
+    email: user.email || "",
+    phone: user.phone || "",
+    address: user.address || "",
+    city: user.city || "",
+    zip: user.zip || "",
+    notes: user.notes || "",
+    preferredDay1: user.preferredDay1 || "",
+    preferredTime1: user.preferredTime1 || "",
+    preferredDay2: user.preferredDay2 || "",
+    preferredTime2: user.preferredTime2 || "",
+    membershipEnabled: !!user.membershipEnabled,
+    isSubscribed: !!user.isSubscribed,
+    role: user.role || "user",
+  });
+
+  const ownerId = user.id ?? user._id;
+  const ownedCars = cars.filter((c) => {
+    const raw = c.userId ?? c.user ?? null;
+    let id = raw;
+    if (raw && typeof raw === "object") id = (raw as any)._id ?? (raw as any).id ?? raw;
+    return String(id) === String(ownerId);
+  });
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      const id = user.id ?? user._id!;
+      const r = await fetch(`/api/admin/users/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!r.ok) throw new Error(await r.text());
+      await refreshUsers();
+      onToggle && onToggle();
+      showToast("User updated", "success");
+    } catch (e) {
+      console.error(e);
+      showToast((e as any)?.message ?? "Failed to save", "error");
+    }
+    setSaving(false);
+  };
+
+  // Car add form
+  const [carForm, setCarForm] = useState({ make: "", model: "", licensePlate: "", color: "" });
+  const [carLoading, setCarLoading] = useState(false);
+  const handleAddCar = async () => {
+    if (!carForm.make || !carForm.model || !carForm.licensePlate) {
+      showToast("Make, model and license plate are required", "error");
+      return;
+    }
+    if (!ownerId) return showToast("Missing user id", "error");
+    setCarLoading(true);
+    try {
+      await createCar({ ...carForm, userId: String(ownerId) });
+      setCarForm({ make: "", model: "", licensePlate: "", color: "" });
+      showToast("Car added", "success");
+    } catch (e) {
+      console.error(e);
+      showToast((e as any)?.message ?? "Failed to add car", "error");
+    }
+    setCarLoading(false);
+  };
+
+  const inputCls = "w-full bg-black border border-white/10 px-4 py-3 text-white text-sm rounded";
+  const labelCls = "text-[11px] text-[#999] uppercase tracking-widest mb-2 block";
+
+  // Format date for display
+  const formatDate = (d?: string) => {
+    if (!d) return "—";
+    try {
+      return new Date(d).toLocaleDateString();
+    } catch {
+      return d;
+    }
+  };
+
+  return (
+    <div className={`bg-[#111] border border-white/5 p-6 rounded-xl transition-all min-h-[200px]`}>
+      {/* ========== CARD HEADER (Always visible) ========== */}
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="text-sm font-bold text-white">{user.name || "—"}</div>
+            <span className={`px-2 py-1 text-xs rounded font-medium ${
+              user.role === "admin" ? "bg-red-600/20 text-red-300" : 
+              user.role === "editor" ? "bg-blue-600/20 text-blue-300" : 
+              "bg-white/10 text-white/70"
+            }`}>
+              {user.role?.toUpperCase() || "USER"}
+            </span>
+            <span className={`px-2 py-1 text-xs rounded font-medium ${
+              user.isSubscribed ? "bg-green-600/20 text-green-300" : "bg-gray-600/20 text-gray-300"
+            }`}>
+              {user.isSubscribed ? "SUBSCRIBED" : "FREE"}
+            </span>
+          </div>
+          <div className="text-xs text-white/70 mb-1">{user.email}</div>
+          <div className="text-xs text-white/50">Joined: {formatDate(user.createdAt)}</div>
+        </div>
+
+        <div className="text-right">
+          <div className="text-xs text-white/70 mb-3">Cars: {carCount}</div>
+          <div className="flex flex-col gap-2">
+            <button 
+              onClick={() => onToggle && onToggle()} 
+              className="px-4 py-2 text-xs bg-[var(--accent)] text-white rounded font-medium hover:opacity-90"
+            >
+              {isOpen ? "Hide" : "Manage"}
+            </button>
+            <button 
+              onClick={() => onDeleteUser(String(ownerId))} 
+              className="px-4 py-2 text-xs bg-red-600 text-white rounded font-medium hover:opacity-90"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ========== EXPANDED FORM (AddressForm-style three steps) ========== */}
+      {isOpen && (
+        <div className="mt-6 pt-6 border-t border-white/10 space-y-6">
+          {/* LOCATION & CONTACT */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold text-white uppercase tracking-widest">Location & Contact</h3>
+            
+            <div>
+              <label className={labelCls}>Name</label>
+              <input 
+                value={form.name} 
+                onChange={(e) => setForm((s: any) => ({ ...s, name: e.target.value }))} 
+                placeholder="Full name"
+                className={inputCls}
+              />
+            </div>
+
+            <div>
+              <label className={labelCls}>Email</label>
+              <input 
+                value={form.email} 
+                onChange={(e) => setForm((s: any) => ({ ...s, email: e.target.value }))} 
+                placeholder="user@example.com"
+                className={inputCls}
+              />
+            </div>
+
+            <div>
+              <label className={labelCls}>Phone</label>
+              <input 
+                value={form.phone} 
+                onChange={(e) => setForm((s: any) => ({ ...s, phone: e.target.value }))} 
+                placeholder="(555) 123-4567"
+                className={inputCls}
+              />
+            </div>
+
+            <div>
+              <label className={labelCls}>Street Address</label>
+              <input 
+                value={form.address} 
+                onChange={(e) => setForm((s: any) => ({ ...s, address: e.target.value }))} 
+                placeholder="123 Main St"
+                className={inputCls}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelCls}>City</label>
+                <input 
+                  value={form.city} 
+                  onChange={(e) => setForm((s: any) => ({ ...s, city: e.target.value }))} 
+                  placeholder="City"
+                  className={inputCls}
+                />
+              </div>
+              <div>
+                <label className={labelCls}>ZIP Code</label>
+                <input 
+                  value={form.zip} 
+                  onChange={(e) => setForm((s: any) => ({ ...s, zip: e.target.value }))} 
+                  placeholder="12345"
+                  className={inputCls}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* SCHEDULING & MEMBERSHIP */}
+          <div className="space-y-4 pt-6 border-t border-white/10">
+            <h3 className="text-sm font-bold text-white uppercase tracking-widest">Step 2: Scheduling & Membership</h3>
+            
+            <div>
+              <label className={labelCls}>Service Notes</label>
+              <textarea 
+                value={form.notes} 
+                onChange={(e) => setForm((s: any) => ({ ...s, notes: e.target.value }))} 
+                placeholder="Any special notes or requests..."
+                rows={3}
+                className={inputCls}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelCls}>Preferred Day 1</label>
+                <input 
+                  value={form.preferredDay1} 
+                  onChange={(e) => setForm((s: any) => ({ ...s, preferredDay1: e.target.value }))} 
+                  placeholder="Monday"
+                  className={inputCls}
+                />
+              </div>
+              <div>
+                <label className={labelCls}>Preferred Time 1</label>
+                <input 
+                  value={form.preferredTime1} 
+                  onChange={(e) => setForm((s: any) => ({ ...s, preferredTime1: e.target.value }))} 
+                  placeholder="9:00 AM"
+                  className={inputCls}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelCls}>Preferred Day 2</label>
+                <input 
+                  value={form.preferredDay2} 
+                  onChange={(e) => setForm((s: any) => ({ ...s, preferredDay2: e.target.value }))} 
+                  placeholder="Wednesday"
+                  className={inputCls}
+                />
+              </div>
+              <div>
+                <label className={labelCls}>Preferred Time 2</label>
+                <input 
+                  value={form.preferredTime2} 
+                  onChange={(e) => setForm((s: any) => ({ ...s, preferredTime2: e.target.value }))} 
+                  placeholder="2:00 PM"
+                  className={inputCls}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 pt-2">
+              <label className="flex items-center gap-2 text-sm text-white cursor-pointer">
+                <input 
+                  type="checkbox"
+                  checked={form.membershipEnabled}
+                  onChange={(e) => setForm((s: any) => ({ ...s, membershipEnabled: e.target.checked }))}
+                  className="w-4 h-4"
+                />
+                <span>Membership Enabled</span>
+              </label>
+              <label className="flex items-center gap-2 text-sm text-white cursor-pointer">
+                <input 
+                  type="checkbox"
+                  checked={form.isSubscribed}
+                  onChange={(e) => setForm((s: any) => ({ ...s, isSubscribed: e.target.checked }))}
+                  className="w-4 h-4"
+                />
+                <span>Is Subscribed</span>
+              </label>
+            </div>
+          </div>
+
+          {/* ACCOUNT & ROLES + CARS */}
+          <div className="space-y-4 pt-6 border-t border-white/10">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-white uppercase tracking-widest">Step 3: Account & Cars</h3>
+              <button 
+                onClick={() => setShowDetails(!showDetails)}
+                className="text-xs text-[#ff3366] hover:text-white"
+              >
+                {showDetails ? "Hide" : "View / Edit"} Details
+              </button>
+            </div>
+
+            {/* Account Details (collapsible) */}
+            {showDetails && (
+              <div className="space-y-4 p-4 bg-gray-900/30 rounded border border-white/5">
+                <div>
+                  <label className={labelCls}>User Role</label>
+                  <select 
+                    value={form.role}
+                    onChange={(e) => setForm((s: any) => ({ ...s, role: e.target.value }))}
+                    className={inputCls}
+                  >
+                    <option value="user">User</option>
+                    <option value="editor">Editor</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+
+                <div className="text-xs text-white/60 space-y-1">
+                  <div><strong>Created:</strong> {formatDate(user.createdAt)}</div>
+                  <div><strong>Last Updated:</strong> {formatDate(user.updatedAt)}</div>
+                  <div><strong>Auth Provider:</strong> {user.authProvider || "credentials"}</div>
+                  <div><strong>Waitlist Status:</strong> {user.waitlistStatus || "none"}</div>
+                  {user.stripeCustomerId && (
+                    <div><strong>Stripe ID:</strong> {user.stripeCustomerId.slice(0, 15)}...</div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Cars Management */}
+            <div className="space-y-3">
+              <label className="text-sm font-bold text-white uppercase tracking-widest">Owned Cars</label>
+              
+              {ownedCars.length > 0 ? (
+                <div className="space-y-2">
+                  {ownedCars.map((c) => (
+                    <div key={c.id ?? c._id} className="flex items-center justify-between bg-gray-900/30 p-3 rounded border border-white/5">
+                      <div>
+                        <div className="font-medium text-white text-sm">{c.make} {c.model}</div>
+                        <div className="text-xs text-white/60">{c.licensePlate}{c.color ? ` • ${c.color}` : ""}</div>
+                      </div>
+                      <button 
+                        onClick={() => {
+                          if (typeof onRequestDeleteCar === "function") {
+                            onRequestDeleteCar(String(c.id ?? c._id));
+                          } else {
+                            deleteCar(String(c.id ?? c._id));
+                          }
+                        }}
+                        className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:opacity-90"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-xs text-white/60 italic">No cars registered</div>
+              )}
+
+              {/* Add Car Form */}
+              <div className="space-y-3 pt-3 border-t border-white/10">
+                <label className="text-xs font-bold text-white uppercase tracking-widest block">Add New Car</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <input 
+                    placeholder="Make" 
+                    value={carForm.make} 
+                    onChange={(e) => setCarForm(s => ({ ...s, make: e.target.value }))} 
+                    className={inputCls}
+                  />
+                  <input 
+                    placeholder="Model" 
+                    value={carForm.model} 
+                    onChange={(e) => setCarForm(s => ({ ...s, model: e.target.value }))} 
+                    className={inputCls}
+                  />
+                  <input 
+                    placeholder="License Plate" 
+                    value={carForm.licensePlate} 
+                    onChange={(e) => setCarForm(s => ({ ...s, licensePlate: e.target.value }))} 
+                    className={inputCls}
+                  />
+                  <input 
+                    placeholder="Color (optional)" 
+                    value={carForm.color} 
+                    onChange={(e) => setCarForm(s => ({ ...s, color: e.target.value }))} 
+                    className={inputCls}
+                  />
+                </div>
+                <button 
+                  onClick={handleAddCar} 
+                  disabled={carLoading}
+                  className="w-full px-4 py-2 bg-[var(--accent)] text-white rounded font-medium text-sm hover:opacity-90 disabled:opacity-50"
+                >
+                  {carLoading ? "Adding..." : "Add Car"}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Save/Cancel Buttons */}
+          <div className="flex gap-3 pt-6 border-t border-white/10">
+            <button 
+              onClick={save} 
+              disabled={saving}
+              className="flex-1 px-4 py-3 bg-white text-black rounded font-semibold text-sm hover:opacity-90 disabled:opacity-50"
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+            <button 
+              onClick={() => onToggle && onToggle()}
+              className="flex-1 px-4 py-3 border border-white/10 text-white rounded font-semibold text-sm hover:bg-white/5"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -892,6 +1543,12 @@ export function Dashboard() {
   const [carsTotalPages, setCarsTotalPages] = useState<number>(1);
   const CARS_LIMIT = 25;
 
+  // track which user card is expanded (only one at a time)
+  const [expandedUserId, setExpandedUserId] = useState<string | null>(null);
+  
+  // view toggle: 'cards' or 'table'
+  const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
+
   // create‑new‑user
   const [showCreate, setShowCreate] = useState(false);
   const [createForm, setCreateForm] = useState({ name: "", email: "", role: "user" });
@@ -915,6 +1572,25 @@ export function Dashboard() {
   } | null>(null);
   const showToast = (msg: string, type: "success" | "error" = "success") =>
     setToast({ msg, type });
+
+  // confirmation modal state – use `askConfirm` to request confirmation
+  const [confirmState, setConfirmState] = useState<{
+    open: boolean;
+    message?: string;
+    onConfirm?: () => Promise<void>;
+  } | null>(null);
+  const askConfirm = (message: string, onConfirm: () => Promise<void>) =>
+    setConfirmState({ open: true, message, onConfirm });
+  const runConfirm = async () => {
+    if (!confirmState?.onConfirm) return setConfirmState(null);
+    try {
+      await confirmState.onConfirm();
+    } catch (e) {
+      console.error(e);
+      showToast((e as any)?.message ?? "Action failed", "error");
+    }
+    setConfirmState(null);
+  };
 
   /* ---------------------- data load ---------------------- */
   useEffect(() => {
@@ -1011,20 +1687,22 @@ export function Dashboard() {
   };
 
   const deleteUser = async (id: string) => {
-    if (!confirm("Delete this user?")) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const r = await fetch(`/api/admin/users/${id}`, { method: "DELETE" });
-      if (!r.ok) throw new Error(await r.text());
-      setUsers((u) => u.filter((x) => (x.id ?? x._id) !== id));
-      showToast("User deleted");
-    } catch (e: any) {
-      setError(e.message ?? "Failed to delete user");
-      showToast(e.message ?? "Failed to delete user", "error");
-    } finally {
-      setLoading(false);
-    }
+    // open a confirmation modal and perform the deletion when confirmed
+    askConfirm("Delete this user?", async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const r = await fetch(`/api/admin/users/${id}`, { method: "DELETE" });
+        if (!r.ok) throw new Error(await r.text());
+        setUsers((u) => u.filter((x) => (x.id ?? x._id) !== id));
+        showToast("User deleted");
+      } catch (e: any) {
+        setError(e.message ?? "Failed to delete user");
+        showToast(e.message ?? "Failed to delete user", "error");
+      } finally {
+        setLoading(false);
+      }
+    });
   };
 
   const openEditModal = (user: User) => {
@@ -1148,52 +1826,55 @@ export function Dashboard() {
 
   /* ---------------------- render ---------------------- */
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 text-gray-900 dark:text-gray-100">
-      {/* toast */}
-      {toast && (
-        <Toast
-          message={toast.msg}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+    <main className="min-h-screen bg-[#0a0a0a] p-6 md:p-12 pt-32 md:pt-36 text-white">
+      <div className="max-w-[1400px] mx-auto">
+        {/* toast */}
+        {toast && (
+          <Toast
+            message={toast.msg}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
 
-      {/* Header */}
-      <header className="mb-6 flex flex-col items-start justify-between gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 md:flex-row md:items-center border-b border-gray-200 dark:border-gray-700">
-        <div>
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Manage users & view stats
-          </p>
+        {/* Header (match user dashboard style) */}
+        <div className="flex flex-wrap justify-between items-end mb-16 pb-6 border-b border-white/10">
+          <div>
+            <h1 className="text-4xl font-black text-white uppercase tracking-tighter mb-2">
+              Admin <span className="text-[#ff3366]">Control</span>
+            </h1>
+            <p className="text-[#999] uppercase tracking-widest text-sm">
+              Manage platform users & stats
+            </p>
+          </div>
+
+          <SignOutButton />
         </div>
-        <button
-          onClick={() => signOut({ callbackUrl: "/" })}
-          className="rounded bg-gray-200 dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
-        >
-          Sign out
-        </button>
-      </header>
 
-      {/* KPI cards */}
-      <section className="mb-6 grid grid-cols-1 gap-3 md:grid-cols-3">
-        <StatCard label="Total Users" value={stats.userCount} />
-        <StatCard label="Active Users" value={stats.activeUsers} />
-        <StatCard label="Cars" value={stats.carCount} />
-      </section>
+        {/* KPI cards */}
+        <section className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+          <StatCard label="Total Users" value={stats.userCount} />
+          <StatCard label="Active Users" value={stats.activeUsers} />
+          <StatCard label="Cars" value={stats.carCount} />
+        </section>
 
       {/* Users list & actions */}
       <section className="space-y-4">
-        <Card className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            Users
-          </h2>
-          <div className="flex gap-2">
+        <div className="bg-[#111] border border-white/5 p-6 rounded-xl flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+          <h2 className="text-xl font-semibold text-white">Users</h2>
+          <div className="flex gap-2 flex-wrap">
+            <button
+              onClick={() => setViewMode(viewMode === 'cards' ? 'table' : 'cards')}
+              className="rounded bg-[#111] border border-white/5 px-3 py-1 text-sm font-medium text-white hover:opacity-90"
+            >
+              {viewMode === 'cards' ? '≡ Table' : '◆ Cards'}
+            </button>
             <button
               onClick={() => {
                 setShowCreate((s) => !s);
                 setCreateForm({ name: "", email: "", role: "user" });
               }}
-              className="rounded bg-[var(--accent)] px-3 py-1 text-sm font-medium text-white hover:opacity-90"
+              className="rounded bg-[#111] border border-white/5 px-3 py-1 text-sm font-medium text-white hover:opacity-90"
             >
               {showCreate ? "Close" : "New User"}
             </button>
@@ -1202,12 +1883,12 @@ export function Dashboard() {
                 refreshUsers();
                 refreshCars();
               }}
-              className="rounded bg-gray-200 dark:bg-gray-700 px-3 py-1 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
+              className="rounded bg-[#111] border border-white/5 px-3 py-1 text-sm font-medium text-white hover:opacity-90"
             >
               Refresh
             </button>
           </div>
-        </Card>
+        </div>
 
         {/* error */}
         {error && <p className="text-sm text-red-600">{error}</p>}
@@ -1226,14 +1907,52 @@ export function Dashboard() {
           </Card>
         )}
 
-        {/* compact users table */}
-        <UserTable
-          users={users}
-          cars={cars}
-          onEditUser={openEditModal}
-          onDeleteUser={deleteUser}
-          onExpandUser={openModal}
-        />
+        {/* Users as cards or table based on viewMode */}
+        {viewMode === 'cards' ? (
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-4 md:p-6">
+            {users.map((u) => {
+              const uid = u.id ?? u._id!;
+              // compute carCount by matching user id
+              const carCount = cars.filter((c) => {
+                const raw = c.userId ?? c.user ?? null;
+                let id = raw;
+                if (raw && typeof raw === "object") id = (raw as any)._id ?? (raw as any).id ?? raw;
+                return String(id) === String(uid);
+              }).length;
+
+              return (
+                <UserCard
+                  key={String(uid)}
+                  user={u}
+                  cars={cars}
+                  carCount={carCount}
+                  onDeleteUser={deleteUser}
+                  createCar={createCar}
+                  deleteCar={deleteCar}
+                  refreshUsers={refreshUsers}
+                  isOpen={expandedUserId === String(uid)}
+                  onToggle={() => setExpandedUserId(prev => prev === String(uid) ? null : String(uid))}
+                  onRequestDeleteCar={(id:string) => askConfirm("Delete this car?", async () => await deleteCar(id))}
+                  showToast={showToast}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <UserTable 
+            users={users} 
+            cars={cars} 
+            onDeleteUser={deleteUser}
+            createCar={createCar}
+            deleteCar={deleteCar}
+            refreshUsers={refreshUsers}
+            expandedUserId={expandedUserId}
+            onToggleExpand={(id) => setExpandedUserId(prev => prev === id ? null : id)}
+            onRequestDeleteCar={(id:string) => askConfirm("Delete this car?", async () => await deleteCar(id))}
+            showToast={showToast}
+            askConfirm={askConfirm}
+          />
+        )}
 
         {/* Pagination controls for users (First / Prev / Page input / Next / Last) */}
         <div className="mt-4 flex items-center justify-between">
@@ -1309,11 +2028,27 @@ export function Dashboard() {
         cars={cars}
         createCar={createCar}
         deleteCar={deleteCar}
+        showToast={showToast}
+        askConfirm={askConfirm}
         carsPage={carsPage}
         carsTotalPages={carsTotalPages}
         setCarsPage={setCarsPage}
         refreshCars={refreshCars}
       />
+      {/* Confirmation modal (centralized replacement for window.confirm) */}
+      {confirmState?.open && (
+        <Modal open={true} onClose={() => setConfirmState(null)} title="Confirm" size="sm" actions={
+          <>
+            <button onClick={() => setConfirmState(null)} className="px-3 py-1 rounded border">Cancel</button>
+            <button onClick={async () => { await runConfirm(); }} className="px-3 py-1 rounded bg-red-600 text-white">Confirm</button>
+          </>
+        }>
+          <div className="p-2">
+            <p>{confirmState?.message}</p>
+          </div>
+        </Modal>
+      )}
+      </div>
     </main>
   );
 }

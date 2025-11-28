@@ -1,29 +1,42 @@
 "use client";
 
-import { authenticate } from "@/app/actions/login";
-import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
-
-const initialState = {
-  success: false,
-  triggerUpdate: false,
-  error: null as string | null,
-};
+import { useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [state, dispatch] = useFormState(authenticate, initialState);
   const { update } = useSession();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (state.success) {
-      update(); // refresh session instantly
-      router.push("/dashboard");
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    // Call next-auth signIn client-side so cookies are set in the browser
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    } as any);
+
+    setLoading(false);
+
+    // signIn returns an object with error/ok/url in v4/v5
+    if (!res || (res as any).error) {
+      setError((res as any)?.error || "Invalid email or password.");
+      return;
     }
-  }, [state.success, update, router]);
+
+    // Refresh session and navigate to dashboard
+    await update();
+    router.push("/dashboard");
+  };
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-6 relative overflow-hidden">
@@ -39,21 +52,22 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {state.error && (
+        {error && (
           <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-4 text-sm text-center mb-6">
-            {state.error}
+            {error}
           </div>
         )}
 
-        <form action={dispatch} className="space-y-6">
+        <form onSubmit={submit} className="space-y-6">
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
               Email Address
             </label>
             <input
               type="email"
-              name="email"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="JOHN@EXAMPLE.COM"
               className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-[#ff3366] transition-colors"
             />
@@ -75,14 +89,21 @@ export default function LoginPage() {
 
             <input
               type="password"
-              name="password"
               required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-[#ff3366] transition-colors"
             />
           </div>
 
-          <LoginButton />
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-4 bg-[#ff3366] text-white font-bold uppercase tracking-widest text-sm hover:bg-[#ff1149] hover:shadow-[0_10px_30px_rgba(255,51,102,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Accessing..." : "Enter Garage"}
+          </button>
         </form>
 
         <p className="text-center mt-8 text-[#999] text-sm">
@@ -93,18 +114,5 @@ export default function LoginPage() {
         </p>
       </div>
     </main>
-  );
-}
-
-function LoginButton() {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="w-full py-4 bg-[#ff3366] text-white font-bold uppercase tracking-widest text-sm hover:bg-[#ff1149] hover:shadow-[0_10px_30px_rgba(255,51,102,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      {pending ? "Accessing..." : "Enter Garage"}
-    </button>
   );
 }
