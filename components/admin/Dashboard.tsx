@@ -963,7 +963,7 @@ const UserTable = ({
                           </div>
                         </div>
 
-                        {/* Step 2: Scheduling & Membership */}
+                        {/* Scheduling & Membership */}
                         <div className="space-y-3 pt-4 border-t border-white/10">
                           <h4 className="text-xs font-bold text-white uppercase tracking-widest">Step 2: Scheduling & Membership</h4>
                           <div>
@@ -1000,7 +1000,7 @@ const UserTable = ({
                           </div>
                         </div>
 
-                        {/* Step 3: Account & Cars */}
+                        {/* Account & Cars */}
                         <div className="space-y-3 pt-4 border-t border-white/10">
                           <div className="flex items-center justify-between">
                             <h4 className="text-xs font-bold text-white uppercase tracking-widest">Step 3: Account & Cars</h4>

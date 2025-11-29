@@ -138,15 +138,15 @@ export default function AddressForm({ userData }: Props) {
       )}
       <form action={formAction} className="space-y-4">
         {/* --- Address Fields --- */}
-        <p className="text-sm text-[#999] font-bold tracking-wider">Step 1: Location & Contact</p>
+        <p className="text-sm text-[#999] font-bold tracking-wider">Location & Contact</p>
         <div>
           <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-            Street Address
+            
           </label>
           <input
             name="address"
             type="text"
-            placeholder="123 MAIN ST"
+            placeholder="Street Address"
             defaultValue={userData.address}
             required
             className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
@@ -154,31 +154,31 @@ export default function AddressForm({ userData }: Props) {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">City</label>
+            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2"></label>
             <input name="city" type="text" placeholder="YOUR CITY" defaultValue={userData.city} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
           <div>
-            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Zip Code</label>
-            <input name="zip" type="text" placeholder="12345" defaultValue={userData.zip} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2"></label>
+            <input name="zip" type="text" placeholder="Zip Code" defaultValue={userData.zip} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
         </div>
         
         {/* --- ADD THIS BLOCK FOR PHONE --- */}
         <div>
           <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-            Contact Phone
+            
           </label>
           <input
             name="phone"
             type="tel"
-            placeholder="Your contact number"
+            placeholder="Contact Phone"
             defaultValue={userData.phone}
             className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
           />
         </div>
         
         {/* --- Scheduling Fields --- */}
-        <p className="text-sm text-[#999] font-bold tracking-wider pt-4">Step 2: Scheduling (2 Visits)</p>
+        <p className="text-sm text-[#999] font-bold tracking-wider pt-4">Scheduling (2 Visits)</p>
         
         <div className="p-4 bg-black/30 border border-white/5 rounded-lg">
           <label className="block text-[11px] text-white uppercase tracking-widest mb-2">Visit 1 Preference</label>
@@ -197,14 +197,14 @@ export default function AddressForm({ userData }: Props) {
         </div>
 
         {/* --- Notes Field --- */}
-        <p className="text-sm text-[#999] font-bold tracking-wider pt-4">Step 3: Service Notes</p>
+        <p className="text-sm text-[#999] font-bold tracking-wider pt-4">Service Notes</p>
         <div>
           <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-            Gate Codes, Parking, etc.
+            
           </label>
           <textarea
             name="notes"
-            placeholder="e.g. My gate code is #1234."
+            placeholder="e.g. Gate Codes, Parking, etc."
             defaultValue={userData.notes}
             rows={3}
             className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
