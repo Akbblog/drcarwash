@@ -43,9 +43,9 @@ export default function Footer() {
                 Facebook
               </a>
             </li>
-            {/* <li>
+            <li>
               <a
-                href="https://www.instagram.com/familywashpk/"
+                href="https://www.instagram.com/familycarwash.com.au/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 text-[#999] text-sm hover:text-[#ff3366] transition-colors group"
@@ -55,7 +55,7 @@ export default function Footer() {
                 </svg>
                 Instagram
               </a>
-            </li> */}
+            </li>
           </ul>
         </div>
       </div>
