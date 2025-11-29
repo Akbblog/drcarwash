@@ -27,7 +27,7 @@ export default function Navbar() {
   return (
     <nav id="navbar" className="fixed w-full z-[1000] px-5 py-5 md:px-12 bg-black/95 backdrop-blur-md border-b border-white/10 transition-all duration-300">
       <div className="max-w-[1400px] mx-auto flex items-center justify-between">
-        
+
         {/* Logo */}
         <Link href="/" className="flex items-center no-underline transition-transform duration-300 hover:scale-105">
           <svg
@@ -55,13 +55,14 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <ul className="hidden md:flex items-center gap-8">
-          <li><Link href="/" className="nav-btn">Home</Link></li>
-          <li><Link href="/#services" className="nav-btn">Services</Link></li>
+          <li><Link href="/" prefetch={true} className="nav-btn">Home</Link></li>
+          <li><Link href="/#services" prefetch={true} className="nav-btn">Services</Link></li>
 
           {session ? (
             <li>
               <Link
                 href="/dashboard"
+                prefetch={true}
                 className="bg-[#ff3366] text-white px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-[1px] uppercase hover:bg-[#ff1149] transition-all shadow-lg shadow-[#ff3366]/20"
               >
                 Your Garage
@@ -69,8 +70,8 @@ export default function Navbar() {
             </li>
           ) : (
             <li>
-              <Link href="/login" className="text-white/70 text-[13px] tracking-[2px] uppercase hover:text-white mr-4">Log In</Link>
-              <Link href="/register" className="bg-[#ff3366] text-white px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-[1px] uppercase hover:bg-[#ff1149]">
+              <Link href="/login" prefetch={true} className="text-white/70 text-[13px] tracking-[2px] uppercase hover:text-white mr-4">Log In</Link>
+              <Link href="/register" prefetch={true} className="bg-[#ff3366] text-white px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-[1px] uppercase hover:bg-[#ff1149]">
                 Join Now
               </Link>
             </li>
@@ -82,19 +83,19 @@ export default function Navbar() {
       {menuOpen && (
         <div className="md:hidden mt-4 bg-black/95 border-t border-white/10">
           <ul className="flex flex-col items-center gap-4 py-5">
-            <li><Link href="/" onClick={() => setMenuOpen(false)} className="mobile-nav-btn">Home</Link></li>
-            <li><Link href="/#services" onClick={() => setMenuOpen(false)} className="mobile-nav-btn">Services</Link></li>
+            <li><Link href="/" prefetch={true} onClick={() => setMenuOpen(false)} className="mobile-nav-btn">Home</Link></li>
+            <li><Link href="/#services" prefetch={true} onClick={() => setMenuOpen(false)} className="mobile-nav-btn">Services</Link></li>
 
             {session ? (
               <li>
-                <Link href="/dashboard" onClick={() => setMenuOpen(false)} className="btn-primary">
+                <Link href="/dashboard" prefetch={true} onClick={() => setMenuOpen(false)} className="btn-primary">
                   Your Garage
                 </Link>
               </li>
             ) : (
               <>
-                <li><Link href="/login" onClick={() => setMenuOpen(false)} className="mobile-nav-btn">Log In</Link></li>
-                <li><Link href="/register" onClick={() => setMenuOpen(false)} className="btn-primary">Join Now</Link></li>
+                <li><Link href="/login" prefetch={true} onClick={() => setMenuOpen(false)} className="mobile-nav-btn">Log In</Link></li>
+                <li><Link href="/register" prefetch={true} onClick={() => setMenuOpen(false)} className="btn-primary">Join Now</Link></li>
               </>
             )}
           </ul>

@@ -4,21 +4,35 @@ import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import HeroCarousel from "@/components/HeroCarousel";
 import LimitedSlotsPopup from "@/components/LimitedSlotsPopup";
+import type { Metadata } from "next";
 
+// Enable ISR (Incremental Static Regeneration) - revalidate every 60 seconds
+// This allows the page to be statically generated but still update session state
+export const revalidate = 60;
 
-
-export const dynamic = "force-dynamic";
+// Generate metadata
+export async function generateMetadata(): Promise<Metadata> {
+    return {
+        title: "Family Car Wash | Premium Doorstep Car Care Service",
+        description: "Discover the ultimate convenience where premium car care meets your driveway. Bi-weekly car wash subscription service delivered to your doorstep.",
+        openGraph: {
+            title: "Family Car Wash | Premium Doorstep Car Care Service",
+            description: "You relax. We wash. Always drive a clean car again.",
+            type: "website",
+        },
+    };
+}
 
 export default async function HomePage() {
     const session = await auth();
     const buttonHref = session ? "/dashboard" : "/register";
     return (
-        <div className="bg-[#0a0a0a] text-white min-h-screen">
+        <div className="bg-[#0a0a0a] text-white min-h-screen snap-y snap-mandatory overflow-y-scroll scroll-smooth">
 
 
 
             {/* --- HERO SECTION --- */}
-            <section id="home" className="relative min-h-screen overflow-hidden bg-black flex items-center py-20 lg:py-0">
+            <section id="home" className="snap-start relative min-h-screen overflow-hidden bg-black flex items-center py-20 lg:py-0">
                 {/* Animated Background Gradient */}
                 <div className="absolute inset-0 opacity-20 animate-spin-slow" style={{
                     background: 'conic-gradient(from 180deg at 50% 50%, #ff3366 0deg, #000 60deg, #ff3366 120deg, #000 180deg, #ff3366 240deg, #000 300deg, #ff3366 360deg)',
@@ -79,7 +93,7 @@ export default async function HomePage() {
             </section>
 
             {/* --- SERVICES SECTION --- */}
-            <section id="services" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
+            <section id="services" className="snap-start py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
                 {/* ... (Section Header is unchanged) ... */}
                 <Reveal>
                     <div className="text-center mb-20">
@@ -101,7 +115,7 @@ export default async function HomePage() {
                     <Reveal delay={0.1} className="h-full">
                         <div className="group bg-[#111] border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2 hover:border-[#ff3366]/50 transition-all duration-500 h-full flex flex-col">
                             <div className="h-[250px] bg-[#1a1a1a] flex items-center justify-center relative overflow-hidden">
-                                <Image src="/images/ExteriorWash.jpg" alt="Exterior Wash" fill className="object-cover opacity-30 group-hover:opacity-50 transition-opacity" />
+                                <Image src="/images/ExteriorWash.jpg" alt="Exterior Wash" fill className="object-cover opacity-30 group-hover:opacity-50 transition-opacity" loading="lazy" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" />
                                 <div className="absolute inset-0 bg-gradient-to-br from-[#ff3366]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                             </div>
                             <div className="p-8 flex flex-col flex-grow">
@@ -116,7 +130,7 @@ export default async function HomePage() {
                     <Reveal delay={0.2} className="h-full">
                         <div className="group bg-[#111] border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2 hover:border-[#ff3366]/50 transition-all duration-500 h-full flex flex-col">
                             <div className="h-[250px] bg-[#1a1a1a] flex items-center justify-center relative overflow-hidden">
-                                <Image src="/images/InteriorDetailing.jpg" alt="Interior Detail" fill className="object-cover opacity-30 group-hover:opacity-50 transition-opacity" />
+                                <Image src="/images/InteriorDetailing.jpg" alt="Interior Detail" fill className="object-cover opacity-30 group-hover:opacity-50 transition-opacity" loading="lazy" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" />
                                 <div className="absolute inset-0 bg-gradient-to-br from-[#ff3366]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                             </div>
                             <div className="p-8 flex flex-col flex-grow">
@@ -131,7 +145,7 @@ export default async function HomePage() {
                     <Reveal delay={0.3} className="h-full">
                         <div className="group bg-[#111] border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2 hover:border-[#ff3366]/50 transition-all duration-500 h-full flex flex-col">
                             <div className="h-[250px] bg-[#1a1a1a] flex items-center justify-center relative overflow-hidden">
-                                <Image src="/images/WheelCleaning.jpg" alt="Wheels & Tires" fill className="object-cover opacity-30 group-hover:opacity-50 transition-opacity" />
+                                <Image src="/images/WheelCleaning.jpg" alt="Wheels & Tires" fill className="object-cover opacity-30 group-hover:opacity-50 transition-opacity" loading="lazy" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" />
                                 <div className="absolute inset-0 bg-gradient-to-br from-[#ff3366]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                             </div>
                             <div className="p-8 flex flex-col flex-grow">
