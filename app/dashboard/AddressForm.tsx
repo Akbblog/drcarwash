@@ -146,7 +146,7 @@ export default function AddressForm({ userData }: Props) {
             Address
           </label>
           <input
-            name="address"
+            name=""
             type="text"
             placeholder="Street Address"
             defaultValue={userData.address}
@@ -157,11 +157,11 @@ export default function AddressForm({ userData }: Props) {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">City</label>
-            <input name="city" type="text" placeholder="Your City" defaultValue={userData.city} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <input name="" type="text" placeholder="Your City" defaultValue={userData.city} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Zip Code</label>
-            <input name="zip" type="text" placeholder="Zip Code" defaultValue={userData.zip} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <input name="" type="text" placeholder="Zip Code" defaultValue={userData.zip} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
         </div>
 
@@ -170,7 +170,7 @@ export default function AddressForm({ userData }: Props) {
             Phone
           </label>
           <input
-            name="phone"
+            name=""
             type="tel"
             placeholder="Contact Phone"
             defaultValue={userData.phone}
