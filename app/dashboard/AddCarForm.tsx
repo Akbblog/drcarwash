@@ -13,8 +13,8 @@
 // - Preserved open/close behavior
 
 import { addCar } from '@/app/actions/user';
-import { useFormState, useFormStatus } from 'react-dom';
-import { useState, useEffect } from 'react';
+import { useFormStatus } from 'react-dom';
+import { useState, useEffect, useActionState } from 'react';
 
 // Match the AddressForm style of server responses
 const initialState: { error?: string; success?: string } = {};
@@ -33,7 +33,7 @@ function SubmitButton() {
 }
 
 export default function AddCarForm() {
-  const [state, formAction] = useFormState(addCar, initialState);
+  const [state, formAction] = useActionState(addCar, initialState);
   const [isOpen, setIsOpen] = useState(false);
 
   // Close form on successful submission
@@ -84,7 +84,7 @@ export default function AddCarForm() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2"></label>
-            <input 
+            <input
               name="make"
               type="text"
               placeholder="Make"
