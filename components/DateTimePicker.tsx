@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import {
     format,
     addMonths,
@@ -22,9 +22,10 @@ type Props = {
     defaultTime?: string;
     label: string;
     onSelectionChange?: (date: Date | null, time: string) => void;
+    footer?: ReactNode;
 };
 
-export default function DateTimePicker({ dayName, timeName, defaultDay, defaultTime, label, onSelectionChange }: Props) {
+export default function DateTimePicker({ dayName, timeName, defaultDay, defaultTime, label, onSelectionChange, footer }: Props) {
     const [currentMonth, setCurrentMonth] = useState(defaultDay ? new Date(defaultDay) : new Date());
 
     // Derived state from props - Controlled Component Pattern
@@ -210,6 +211,13 @@ export default function DateTimePicker({ dayName, timeName, defaultDay, defaultT
                             {selectedTime ? selectedTime.split(" (")[0] : <span className="text-white/30">Select Time</span>}
                         </p>
                     </div>
+
+                    {/* Footer (Buttons) */}
+                    {footer && (
+                        <div className="mt-4 pt-4 border-t border-white/10">
+                            {footer}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

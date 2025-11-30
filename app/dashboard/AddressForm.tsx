@@ -143,10 +143,10 @@ export default function AddressForm({ userData }: Props) {
         <p className="text-sm text-[#999] font-bold tracking-wider">Location & Contact</p>
         <div>
           <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-
+            Address
           </label>
           <input
-            name=""
+            name="address"
             type="text"
             placeholder="Street Address"
             defaultValue={userData.address}
@@ -156,26 +156,43 @@ export default function AddressForm({ userData }: Props) {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2"></label>
-            <input name="" type="text" placeholder="Your City" defaultValue={userData.city} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">City</label>
+            <input name="city" type="text" placeholder="Your City" defaultValue={userData.city} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
           <div>
-            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2"></label>
-            <input name="" type="text" placeholder="Zip Code" defaultValue={userData.zip} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">Zip Code</label>
+            <input name="zip" type="text" placeholder="Zip Code" defaultValue={userData.zip} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
           </div>
         </div>
 
         <div>
           <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-
+            Phone
           </label>
           <input
-            name=""
+            name="phone"
             type="tel"
             placeholder="Contact Phone"
             defaultValue={userData.phone}
             className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
           />
+        </div>
+
+        {/* --- Notes Field (Moved Up) --- */}
+        <div className="pt-4 border-t border-white/10">
+          <p className="text-sm text-[#999] font-bold tracking-wider mb-4">Service Notes</p>
+          <div>
+            <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
+              Notes
+            </label>
+            <textarea
+              name="notes"
+              placeholder="e.g. Gate Codes, Parking, etc."
+              defaultValue={userData.notes}
+              rows={3}
+              className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
+            />
+          </div>
         </div>
 
         {/* --- Scheduling Fields --- */}
@@ -199,59 +216,43 @@ export default function AddressForm({ userData }: Props) {
               if (step === 1) setVisit1({ date: d, time: t });
               else setVisit2({ date: d, time: t });
             }}
+            footer={
+              step === 1 ? (
+                <div className="flex gap-2">
+                  {serverHasDetails && (
+                    <button
+                      type="button"
+                      onClick={handleCancel}
+                      className="w-1/3 py-3 bg-white/10 text-white font-bold uppercase tracking-widest text-xs hover:bg-white/20 transition-all"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    disabled={!visit1.date || !visit1.time}
+                    className={`py-3 bg-[#ff3366] text-white font-bold uppercase tracking-widest text-xs hover:bg-[#ff1149] transition-all disabled:opacity-50 disabled:cursor-not-allowed ${serverHasDetails ? 'w-2/3' : 'w-full'}`}
+                  >
+                    Next: Schedule Visit 2
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="w-1/3 py-3 bg-white/10 text-white font-bold uppercase tracking-widest text-xs hover:bg-white/20 transition-all"
+                  >
+                    Back
+                  </button>
+                  <div className="w-2/3">
+                    <SubmitButton />
+                  </div>
+                </div>
+              )
+            }
           />
-
-          {/* --- Notes Field (Always Visible) --- */}
-          <div className="pt-4 border-t border-white/10">
-            <p className="text-sm text-[#999] font-bold tracking-wider mb-4">Service Notes</p>
-            <div>
-              <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-                Notes
-              </label>
-              <textarea
-                name="notes"
-                placeholder="e.g. Gate Codes, Parking, etc."
-                defaultValue={userData.notes}
-                rows={3}
-                className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
-              />
-            </div>
-          </div>
-
-          {step === 1 ? (
-            <div className="mt-4 flex gap-2">
-              {serverHasDetails && (
-                <button
-                  type="button"
-                  onClick={handleCancel}
-                  className="w-1/3 py-3 bg-white/10 text-white font-bold uppercase tracking-widest text-xs hover:bg-white/20 transition-all"
-                >
-                  Cancel
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={handleNext}
-                disabled={!visit1.date || !visit1.time}
-                className={`py-3 bg-[#ff3366] text-white font-bold uppercase tracking-widest text-xs hover:bg-[#ff1149] transition-all disabled:opacity-50 disabled:cursor-not-allowed ${serverHasDetails ? 'w-2/3' : 'w-full'}`}
-              >
-                Next: Schedule Visit 2
-              </button>
-            </div>
-          ) : (
-            <div className="mt-4 flex gap-2">
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                className="w-1/3 py-3 bg-white/10 text-white font-bold uppercase tracking-widest text-xs hover:bg-white/20 transition-all"
-              >
-                Back
-              </button>
-              <div className="w-2/3">
-                <SubmitButton />
-              </div>
-            </div>
-          )}
         </div>
       </form>
     </div>
