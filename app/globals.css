@@ -6,8 +6,8 @@
 /* Noir Theme CSS Integration */
 :root {
   --primary: #0a0a0a;
-  --accent: #ff3366;
-  --accent-hover: #ff1149;
+  --accent: #FF991C;
+  --accent-hover: #E68A19;
   --text-light: #ffffff;
   --text-muted: #999;
   --bg-dark: #000;
@@ -145,7 +145,7 @@ body {
   position: absolute;
   width: 30px;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 51, 102, 0.5), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 153, 28, 0.5), transparent);
   left: -30px;
   animation: shimmer 3s ease infinite;
 }
@@ -154,7 +154,7 @@ body {
 .hero-badge {
   display: inline-block;
   padding: 8px 20px;
-  background: rgba(255, 51, 102, 0.1);
+  background: rgba(255, 153, 28, 0.1);
   border: 1px solid var(--accent);
   color: var(--accent);
   font-size: 11px;
@@ -220,7 +220,7 @@ body {
 
 .cta-button.primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 20px 40px rgba(255, 51, 102, 0.3);
+  box-shadow: 0 20px 40px rgba(255, 153, 28, 0.3);
 }
 
 .cta-button.outline {
@@ -288,7 +288,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, transparent 30%, rgba(255, 51, 102, 0.1) 50%, transparent 70%);
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 153, 28, 0.1) 50%, transparent 70%);
   transform: translateX(-100%);
   transition: transform 0.8s ease;
 }
@@ -304,7 +304,7 @@ body {
 
 .collection-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(255, 51, 102, 0.2);
+  box-shadow: 0 15px 30px rgba(255, 153, 28, 0.2);
 }
 
 .card-content {
@@ -401,12 +401,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ff3366;
+  background: #FF991C;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff1149;
+  background: #E68A19;
 }
 
 /* Smooth transitions */

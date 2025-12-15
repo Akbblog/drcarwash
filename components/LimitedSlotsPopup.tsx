@@ -45,11 +45,11 @@ export default function LimitedSlotsPopup({ isLoggedIn }: { isLoggedIn: boolean 
             </button>
 
             {/* TITLE */}
-           <h2 className="text-3xl font-black text-[#ff3366] mb-4 leading-tight">
+            <h2 className="text-3xl font-black text-[#FF991C] mb-4 leading-tight">
               Only{" "}
               <span className="text-[white]">60</span>{" "}
-              <span className="text-[#ff3366]">Membership Slots</span>
-            </h2>             
+              <span className="text-[#FF991C]">Membership Slots</span>
+            </h2>
 
             {/* SUBTEXT */}
             <p className="text-[#999] text-sm leading-relaxed mb-8">
@@ -62,7 +62,7 @@ export default function LimitedSlotsPopup({ isLoggedIn }: { isLoggedIn: boolean 
             <Link
               href={CTA_HREF}
               onClick={() => setVisible(false)}
-              className="block w-full py-4 bg-[#ff3366] text-white font-bold uppercase tracking-[2px] text-sm rounded-md hover:shadow-[0_10px_30px_rgba(255,51,102,0.4)] hover:-translate-y-1 transition-all"
+              className="block w-full py-4 bg-[#FF991C] text-white font-bold uppercase tracking-[2px] text-sm rounded-md hover:shadow-[0_10px_30px_rgba(255,153,28,0.4)] hover:-translate-y-1 transition-all"
             >
               Secure Your Spot
             </Link>

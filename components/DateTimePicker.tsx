@@ -122,7 +122,7 @@ export default function DateTimePicker({ dayName, timeName, defaultDay, defaultT
                         key={day.toString()}
                         className={`relative p-1.5 text-center text-xs cursor-pointer transition-all duration-200 rounded-md
               ${!isCurrentMonth ? "text-[#333]" : "text-white"}
-              ${isSelected ? "bg-[#ff3366] text-white shadow-[0_0_10px_rgba(255,51,102,0.4)]" : "hover:bg-white/5"}
+              ${isSelected ? "bg-[#FF991C] text-white shadow-[0_0_10px_rgba(255,153,28,0.4)]" : "hover:bg-white/5"}
             `}
                         onClick={() => onDateClick(cloneDay)}
                     >
@@ -173,12 +173,12 @@ export default function DateTimePicker({ dayName, timeName, defaultDay, defaultT
                             className={`w-full p-2 rounded-md border text-xs font-bold uppercase tracking-wider transition-all duration-300 flex flex-col items-center justify-center gap-1 group
                                 ${selectedTime === "Morning (8am-12pm)"
                                     ? "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.15)]"
-                                    : "bg-transparent border-white/10 text-white hover:border-[#ff3366] hover:text-[#ff3366]"
+                                    : "bg-transparent border-white/10 text-white hover:border-[#FF991C] hover:text-[#FF991C]"
                                 }
                             `}
                         >
                             <span>Morning</span>
-                            <span className={`text-[8px] ${selectedTime === "Morning (8am-12pm)" ? "text-black/60" : "text-white/40 group-hover:text-[#ff3366]/60"}`}>
+                            <span className={`text-[8px] ${selectedTime === "Morning (8am-12pm)" ? "text-black/60" : "text-white/40 group-hover:text-[#FF991C]/60"}`}>
                                 8am - 12pm
                             </span>
                         </button>
@@ -189,12 +189,12 @@ export default function DateTimePicker({ dayName, timeName, defaultDay, defaultT
                             className={`w-full p-2 rounded-md border text-xs font-bold uppercase tracking-wider transition-all duration-300 flex flex-col items-center justify-center gap-1 group
                                 ${selectedTime === "Afternoon (12pm-4pm)"
                                     ? "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.15)]"
-                                    : "bg-transparent border-white/10 text-white hover:border-[#ff3366] hover:text-[#ff3366]"
+                                    : "bg-transparent border-white/10 text-white hover:border-[#FF991C] hover:text-[#FF991C]"
                                 }
                             `}
                         >
                             <span>Afternoon</span>
-                            <span className={`text-[8px] ${selectedTime === "Afternoon (12pm-4pm)" ? "text-black/60" : "text-white/40 group-hover:text-[#ff3366]/60"}`}>
+                            <span className={`text-[8px] ${selectedTime === "Afternoon (12pm-4pm)" ? "text-black/60" : "text-white/40 group-hover:text-[#FF991C]/60"}`}>
                                 12pm - 4pm
                             </span>
                         </button>
@@ -207,7 +207,7 @@ export default function DateTimePicker({ dayName, timeName, defaultDay, defaultT
                         </p>
                         <p className="text-white text-xs font-medium truncate">
                             {selectedDate ? format(selectedDate, "MMM do") : <span className="text-white/30">Select Date</span>}
-                            <span className="mx-1.5 text-[#ff3366]">•</span>
+                            <span className="mx-1.5 text-[#FF991C]">•</span>
                             {selectedTime ? selectedTime.split(" (")[0] : <span className="text-white/30">Select Time</span>}
                         </p>
                     </div>

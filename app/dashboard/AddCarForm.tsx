@@ -25,7 +25,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="w-full py-3 bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-[#ff3366] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      className="w-full py-3 bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-[#FF991C] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {pending ? 'ADDING VEHICLE...' : 'ADD VEHICLE'}
     </button>
@@ -89,7 +89,7 @@ export default function AddCarForm() {
               type="text"
               placeholder="Make"
               required
-              className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
+              className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] transition-colors"
             />
           </div>
 
@@ -100,7 +100,7 @@ export default function AddCarForm() {
               type="text"
               placeholder="Model"
               required
-              className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
+              className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] transition-colors"
             />
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function AddCarForm() {
               type="text"
               placeholder="Color"
               required
-              className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
+              className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] transition-colors"
             />
           </div>
 
@@ -125,7 +125,7 @@ export default function AddCarForm() {
               type="text"
               placeholder="License Plate"
               required
-              className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
+              className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] transition-colors"
             />
           </div>
         </div>

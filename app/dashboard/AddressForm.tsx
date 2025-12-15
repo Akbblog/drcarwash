@@ -25,7 +25,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="w-full py-3 bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-[#ff3366] hover:text-white transition-all disabled:opacity-50"
+      className="w-full py-3 bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-[#FF991C] hover:text-white transition-all disabled:opacity-50"
     >
       {pending ? 'SAVING...' : 'SAVE DETAILS'}
     </button>
@@ -93,7 +93,7 @@ export default function AddressForm({ userData }: Props) {
           </h3>
           <button
             onClick={handleEdit}
-            className="text-xs text-[#999] uppercase tracking-widest hover:text-[#ff3366]"
+            className="text-xs text-[#999] uppercase tracking-widest hover:text-[#FF991C]"
           >
             [ Edit ]
           </button>
@@ -151,17 +151,17 @@ export default function AddressForm({ userData }: Props) {
             placeholder="Street Address"
             defaultValue={userData.address}
             required
-            className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
+            className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] transition-colors"
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2"></label>
-            <input name="city" type="text" placeholder="Your City" defaultValue={userData.city} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <input name="city" type="text" placeholder="Your City" defaultValue={userData.city} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] transition-colors" />
           </div>
           <div>
             <label className="block text-[11px] text-[#999] uppercase tracking-widest mb-2"></label>
-            <input name="zip" type="text" placeholder="Zip Code" defaultValue={userData.zip} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors" />
+            <input name="zip" type="text" placeholder="Zip Code" defaultValue={userData.zip} required className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] transition-colors" />
           </div>
         </div>
 
@@ -174,7 +174,7 @@ export default function AddressForm({ userData }: Props) {
             type="tel"
             placeholder="Contact Phone"
             defaultValue={userData.phone}
-            className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
+            className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] transition-colors"
           />
         </div>
 
@@ -215,7 +215,7 @@ export default function AddressForm({ userData }: Props) {
                     type="button"
                     onClick={handleNext}
                     disabled={!visit1.date || !visit1.time}
-                    className={`py-3 bg-[#ff3366] text-white font-bold uppercase tracking-widest text-xs hover:bg-[#ff1149] transition-all disabled:opacity-50 disabled:cursor-not-allowed ${serverHasDetails ? 'w-2/3' : 'w-full'}`}
+                    className={`py-3 bg-[#FF991C] text-white font-bold uppercase tracking-widest text-xs hover:bg-[#E68A19] transition-all disabled:opacity-50 disabled:cursor-not-allowed ${serverHasDetails ? 'w-2/3' : 'w-full'}`}
                   >
                     Next: Schedule Visit 2
                   </button>
@@ -249,7 +249,7 @@ export default function AddressForm({ userData }: Props) {
                 placeholder="e.g. Gate Codes, Parking, etc."
                 defaultValue={userData.notes}
                 rows={3}
-                className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] transition-colors"
+                className="w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] transition-colors"
               />
             </div>
           </div>

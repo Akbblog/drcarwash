@@ -35,7 +35,7 @@ export default async function HomePage() {
             <section id="home" className="snap-start relative min-h-screen overflow-hidden bg-black flex items-center py-20 lg:py-0">
                 {/* Animated Background Gradient */}
                 <div className="absolute inset-0 opacity-20 animate-spin-slow" style={{
-                    background: 'conic-gradient(from 180deg at 50% 50%, #ff3366 0deg, #000 60deg, #ff3366 120deg, #000 180deg, #ff3366 240deg, #000 300deg, #ff3366 360deg)',
+                    background: 'conic-gradient(from 180deg at 50% 50%, #FF991C 0deg, #000 60deg, #FF991C 120deg, #000 180deg, #FF991C 240deg, #000 300deg, #FF991C 360deg)',
                     filter: 'blur(100px)',
                 }}></div>
                 <LimitedSlotsPopup isLoggedIn={!!session} />
@@ -43,14 +43,14 @@ export default async function HomePage() {
                 <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12 grid lg:grid-cols-2 items-center gap-12 lg:gap-0 h-full">
                     <div className="flex flex-col justify-center pt-10 lg:pt-0">
                         <Reveal>
-                            <div className="inline-block px-5 py-2 bg-[#ff3366]/10 border border-[#ff3366] text-[#ff3366] text-[11px] uppercase tracking-[3px] mb-8 rounded-full">
+                            <div className="inline-block px-5 py-2 bg-[#FF991C]/10 border border-[#FF991C] text-[#FF991C] text-[11px] uppercase tracking-[3px] mb-8 rounded-full">
                                 Doorstep Service 2025
                             </div>
                         </Reveal>
                         <Reveal delay={0.1}>
                             <h1 className="text-[clamp(40px,7vw,90px)] font-black leading-[1.1] mb-6">
                                 <span className="block">Redefine</span>
-                                <span className="block">Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff3366] to-[#ff6690] italic pr-2">Drive.</span></span>
+                                <span className="block">Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF991C] to-[#FFB347] italic pr-2">Drive.</span></span>
                             </h1>
                         </Reveal>
                         <Reveal delay={0.2}>
@@ -63,11 +63,11 @@ export default async function HomePage() {
                         <Reveal delay={0.3}>
                             <div className="flex gap-12 mb-12">
                                 <div>
-                                    <span className="block text-5xl font-black text-[#ff3366] mb-1">2x</span>
+                                    <span className="block text-5xl font-black text-[#FF991C] mb-1">2x</span>
                                     <span className="text-sm uppercase tracking-[2px] text-[#999]">Visits Per Month</span>
                                 </div>
                                 <div>
-                                    <span className="block text-5xl font-black text-[#ff3366] mb-1">100%</span>
+                                    <span className="block text-5xl font-black text-[#FF991C] mb-1">100%</span>
                                     <span className="text-sm uppercase tracking-[2px] text-[#999]">Hassle Free</span>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@ export default async function HomePage() {
 
                         <Reveal delay={0.4}>
                             <div className="flex flex-wrap gap-5">
-                                <Link href={buttonHref} className="px-8 md:px-10 py-4 bg-[#ff3366] text-white uppercase tracking-[2px] font-bold text-[13px] rounded-sm hover:translate-y-[-2px] hover:shadow-[0_20px_40px_rgba(255,51,102,0.3)] transition-all">
+                                <Link href={buttonHref} className="px-8 md:px-10 py-4 bg-[#FF991C] text-white uppercase tracking-[2px] font-bold text-[13px] rounded-sm hover:translate-y-[-2px] hover:shadow-[0_20px_40px_rgba(255,153,28,0.3)] transition-all">
                                     Start Membership
                                 </Link>
                                 <Link href="#services" className="px-8 md:px-10 py-4 bg-transparent text-white border border-white/30 uppercase tracking-[2px] font-bold text-[13px] rounded-sm backdrop-blur-md hover:bg-white/10 hover:border-white transition-all">
@@ -93,81 +93,83 @@ export default async function HomePage() {
             </section>
 
             {/* --- SERVICES SECTION --- */}
-            <section id="services" className="snap-start py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
-                {/* ... (Section Header is unchanged) ... */}
-                <Reveal>
-                    <div className="text-center mb-20">
-                        <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-5">Premium Services</h2>
-                        <div className="w-20 h-1 bg-[#ff3366] mx-auto mb-6"></div>
-                        <p className="text-[#999] text-lg uppercase tracking-[3px]">Included in your subscription</p>
+            <section id="services" className="relative py-32 px-6 md:px-12 bg-[#0a0a0a] overflow-hidden">
+                <div className="relative z-10 max-w-[1400px] mx-auto">
+                    <Reveal>
+                        <div className="text-center mb-20">
+                            <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-5 text-white">Premium Services</h2>
+                            <div className="w-20 h-1 bg-[#FF991C] mx-auto mb-6"></div>
+                            <p className="text-[#999] text-lg uppercase tracking-[3px]">Included in your subscription</p>
+                        </div>
+                    </Reveal>
+
+                    {/* --- Grid of Services --- */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+
+                        {/* Service Card 1 — STARTER */}
+                        <Reveal delay={0.1} className="h-full">
+                            <div className="group bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2 hover:border-[#FF991C]/50 hover:shadow-[0_10px_40px_-10px_rgba(255,153,28,0.3)] transition-all duration-500 h-full flex flex-col">
+                                <div className="h-[250px] bg-[#1a1a1a] flex items-center justify-center relative overflow-hidden">
+                                    <Image src="/images/ExteriorWash.jpg" alt="Starter Package" fill className="object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent opacity-80"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                </div>
+                                <div className="p-8 flex flex-col flex-grow relative">
+                                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#FF991C]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                    <span className="inline-block self-start px-3 py-1 bg-[#FF991C]/10 text-[#FF991C] text-[10px] font-bold uppercase tracking-wider mb-4 rounded-full border border-[#FF991C]/20">
+                                        Starter
+                                    </span>
+                                    <h3 className="text-2xl font-bold mb-3 text-white">Starter Package</h3>
+                                    <p className="text-[#bbb] text-sm leading-relaxed">
+                                        Essential exterior wash, quick interior wipe, and tire shine — perfect for light maintenance.
+                                    </p>
+                                </div>
+                            </div>
+                        </Reveal>
+
+                        {/* Service Card 2 — REGULAR */}
+                        <Reveal delay={0.2} className="h-full">
+                            <div className="group bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2 hover:border-[#FF991C]/50 hover:shadow-[0_10px_40px_-10px_rgba(255,153,28,0.3)] transition-all duration-500 h-full flex flex-col">
+                                <div className="h-[250px] bg-[#1a1a1a] flex items-center justify-center relative overflow-hidden">
+                                    <Image src="/images/InteriorDetailing.jpg" alt="Regular Package" fill className="object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent opacity-80"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                </div>
+                                <div className="p-8 flex flex-col flex-grow relative">
+                                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#FF991C]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                    <span className="inline-block self-start px-3 py-1 bg-[#FF991C] text-white text-[10px] font-bold uppercase tracking-wider mb-4 rounded-full shadow-[0_4px_10px_rgba(255,153,28,0.4)]">
+                                        Most Popular
+                                    </span>
+                                    <h3 className="text-2xl font-bold mb-3 text-white">Regular Package</h3>
+                                    <p className="text-[#bbb] text-sm leading-relaxed">
+                                        Full exterior wash, interior vacuuming, dashboard cleaning, windows, and wheel detailing.
+                                    </p>
+                                </div>
+                            </div>
+                        </Reveal>
+
+                        {/* Service Card 3 — PREMIUM */}
+                        <Reveal delay={0.3} className="h-full">
+                            <div className="group bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2 hover:border-[#FF991C]/50 hover:shadow-[0_10px_40px_-10px_rgba(255,153,28,0.3)] transition-all duration-500 h-full flex flex-col">
+                                <div className="h-[250px] bg-[#1a1a1a] flex items-center justify-center relative overflow-hidden">
+                                    <Image src="/images/WheelCleaning.jpg" alt="Premium Package" fill className="object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent opacity-80"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                </div>
+                                <div className="p-8 flex flex-col flex-grow relative">
+                                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#FF991C]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                    <span className="inline-block self-start px-3 py-1 bg-[#FF991C]/10 text-[#FF991C] text-[10px] font-bold uppercase tracking-wider mb-4 rounded-full border border-[#FF991C]/20">
+                                        Premium
+                                    </span>
+                                    <h3 className="text-2xl font-bold mb-3 text-white">Premium Package</h3>
+                                    <p className="text-[#bbb] text-sm leading-relaxed">
+                                        Deep full-interior detailing, premium exterior wash, wheel & tire treatment, and full conditioning.
+                                    </p>
+                                </div>
+                            </div>
+                        </Reveal>
+
                     </div>
-                </Reveal>
-
-                {/* --- 3. Grid of Services Updated --- */}
-                {/* --- IMPORTANT ---
-          Add 3 images to `public/images/`:
-          1. service-exterior.jpg
-          2. service-interior.jpg
-          3. service-wheels.jpg
-          */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
-                    {/* Service Card 1 */}
-                    <Reveal delay={0.1} className="h-full">
-                        <div className="group bg-[#111] border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2 hover:border-[#ff3366]/50 transition-all duration-500 h-full flex flex-col">
-                            <div className="h-[250px] bg-[#1a1a1a] flex items-center justify-center relative overflow-hidden">
-                                <Image src="/images/ExteriorWash.jpg" alt="Exterior Wash" fill className="object-cover opacity-30 group-hover:opacity-50 transition-opacity" loading="lazy" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" />
-                                <div className="absolute inset-0 bg-gradient-to-br from-[#ff3366]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            </div>
-                            <div className="p-8 flex flex-col flex-grow">
-                                <span className="inline-block self-start px-3 py-1 bg-[#ff3366]/10 text-[#ff3366] text-[10px] font-bold uppercase tracking-wider mb-4 rounded-full">Bi-Weekly</span>
-                                <h3 className="text-2xl font-bold mb-3">Exterior Wash</h3>
-                                <p className="text-[#999] text-sm leading-relaxed">Meticulous hand wash, premium soap, spot-free rinse, and microfiber hand dry for a swirl-free shine.</p>
-                            </div>
-                        </div>
-                    </Reveal>
-
-                    {/* Service Card 2 */}
-                    <Reveal delay={0.2} className="h-full">
-                        <div className="group bg-[#111] border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2 hover:border-[#ff3366]/50 transition-all duration-500 h-full flex flex-col">
-                            <div className="h-[250px] bg-[#1a1a1a] flex items-center justify-center relative overflow-hidden">
-                                <Image src="/images/InteriorDetailing.jpg" alt="Interior Detail" fill className="object-cover opacity-30 group-hover:opacity-50 transition-opacity" loading="lazy" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" />
-                                <div className="absolute inset-0 bg-gradient-to-br from-[#ff3366]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            </div>
-                            <div className="p-8 flex flex-col flex-grow">
-                                <span className="inline-block self-start px-3 py-1 bg-[#ff3366] text-white text-[10px] font-bold uppercase tracking-wider mb-4 rounded-full">Most Popular</span>
-                                <h3 className="text-2xl font-bold mb-3">Interior Detail</h3>
-                                <p className="text-[#999] text-sm leading-relaxed">Thorough vacuuming of carpets and seats, wipe down of all surfaces, dash, and console. Interior windows cleaned.</p>
-                            </div>
-                        </div>
-                    </Reveal>
-
-                    {/* Service Card 3 */}
-                    <Reveal delay={0.3} className="h-full">
-                        <div className="group bg-[#111] border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2 hover:border-[#ff3366]/50 transition-all duration-500 h-full flex flex-col">
-                            <div className="h-[250px] bg-[#1a1a1a] flex items-center justify-center relative overflow-hidden">
-                                <Image src="/images/WheelCleaning.jpg" alt="Wheels & Tires" fill className="object-cover opacity-30 group-hover:opacity-50 transition-opacity" loading="lazy" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" />
-                                <div className="absolute inset-0 bg-gradient-to-br from-[#ff3366]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            </div>
-                            <div className="p-8 flex flex-col flex-grow">
-                                <span className="inline-block self-start px-3 py-1 bg-[#ff3366]/10 text-[#ff3366] text-[10px] font-bold uppercase tracking-wider mb-4 rounded-full">Deep Clean</span>
-                                <h3 className="text-2xl font-bold mb-3">Wheels & Tires</h3>
-                                <p className="text-[#999] text-sm leading-relaxed">Brake dust removal, wheel face cleaning, and premium tire shine application for a showroom finish.</p>
-                            </div>
-                        </div>
-                    </Reveal>
-
-                    {/* ... (Pricing Card is unchanged) ... */}
-                    <Reveal delay={0.4} className="h-full">
-                        <div className="group bg-gradient-to-br from-[#ff3366] to-[#b30038] rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(255,51,102,0.4)] transition-all duration-500 flex flex-col items-center justify-center text-center p-8 h-full relative bg-noise">
-                            <h3 className="text-xl font-black uppercase tracking-[4px] mb-6 relative z-10">Family Plan</h3>
-                            <div className="text-7xl font-black mb-2 relative z-10">$249<span className="text-2xl font-bold">/mo</span></div>
-                            <div className="w-12 h-1 bg-white/50 mb-6 relative z-10"></div>
-                            <p className="text-white/90 font-medium mb-8 relative z-10">Include 2 household cars</p>
-                            <Link href={buttonHref} className="px-10 py-4 bg-white text-[#ff3366] font-bold uppercase tracking-[2px] text-sm rounded-full hover:scale-105 transition-all shadow-xl relative z-10">
-                                Subscribe Now
-                            </Link>
-                        </div>
-                    </Reveal>
                 </div>
             </section>
 

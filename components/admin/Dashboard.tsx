@@ -28,6 +28,7 @@ type User = {
   preferredDay2?: string;
   preferredTime2?: string;
   membershipEnabled?: boolean;
+  membershipStartDate?: string;
   isSubscribed?: boolean;
   stripeCustomerId?: string;
   createdAt?: string;
@@ -242,8 +243,8 @@ const UserForm = ({
               ? "Saving…"
               : "Save"
             : loading
-            ? "Creating…"
-            : "Create"}
+              ? "Creating…"
+              : "Create"}
         </button>
         <button
           type="button"
@@ -373,8 +374,8 @@ const UserModal = ({
   carsTotalPages,
   setCarsPage,
   refreshCars,
-  showToast = () => {},
-  askConfirm = () => {},
+  showToast = () => { },
+  askConfirm = () => { },
 }: UserModalProps) => {
   const [carForm, setCarForm] = useState({
     make: "",
@@ -617,8 +618,8 @@ const UserModal = ({
                     type="button"
                     onClick={async () => {
                       const first = 1;
-                      propsOr(setCarsPage, (n: number) => {}) (first);
-                      await propsOr(refreshCars, async (p?: number) => {}) (first);
+                      propsOr(setCarsPage, (n: number) => { })(first);
+                      await propsOr(refreshCars, async (p?: number) => { })(first);
                     }}
                     disabled={propsOr(carsPage, 1) <= 1}
                     className={`rounded px-2 py-0.5 text-xs font-medium ${propsOr(carsPage, 1) <= 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
@@ -629,8 +630,8 @@ const UserModal = ({
                     type="button"
                     onClick={async () => {
                       const prev = Math.max(1, (propsOr(carsPage, 1) || 1) - 1);
-                      propsOr(setCarsPage, (n: number) => {}) (prev);
-                      await propsOr(refreshCars, async (p?: number) => {}) (prev);
+                      propsOr(setCarsPage, (n: number) => { })(prev);
+                      await propsOr(refreshCars, async (p?: number) => { })(prev);
                     }}
                     disabled={propsOr(carsPage, 1) <= 1}
                     className={`rounded px-2 py-0.5 text-xs font-medium ${propsOr(carsPage, 1) <= 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
@@ -646,8 +647,8 @@ const UserModal = ({
                     value={propsOr(carsPage, 1)}
                     onChange={async (e) => {
                       const v = Math.max(1, Math.min(propsOr(carsTotalPages, 1), Number(e.target.value || 1)));
-                      propsOr(setCarsPage, (n: number) => {}) (v);
-                      await propsOr(refreshCars, async (p?: number) => {}) (v);
+                      propsOr(setCarsPage, (n: number) => { })(v);
+                      await propsOr(refreshCars, async (p?: number) => { })(v);
                     }}
                     className="w-16 rounded border border-gray-300 bg-white dark:bg-gray-900 p-1 text-xs text-gray-900 dark:text-gray-100"
                   />
@@ -656,8 +657,8 @@ const UserModal = ({
                     type="button"
                     onClick={async () => {
                       const next = Math.min(propsOr(carsTotalPages, 1), (propsOr(carsPage, 1) || 1) + 1);
-                      propsOr(setCarsPage, (n: number) => {}) (next);
-                      await propsOr(refreshCars, async (p?: number) => {}) (next);
+                      propsOr(setCarsPage, (n: number) => { })(next);
+                      await propsOr(refreshCars, async (p?: number) => { })(next);
                     }}
                     disabled={propsOr(carsPage, 1) >= propsOr(carsTotalPages, 1)}
                     className={`rounded px-2 py-0.5 text-xs font-medium ${propsOr(carsPage, 1) >= propsOr(carsTotalPages, 1) ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
@@ -668,8 +669,8 @@ const UserModal = ({
                     type="button"
                     onClick={async () => {
                       const last = propsOr(carsTotalPages, 1);
-                      propsOr(setCarsPage, (n: number) => {}) (last);
-                      await propsOr(refreshCars, async (p?: number) => {}) (last);
+                      propsOr(setCarsPage, (n: number) => { })(last);
+                      await propsOr(refreshCars, async (p?: number) => { })(last);
                     }}
                     disabled={propsOr(carsPage, 1) >= propsOr(carsTotalPages, 1)}
                     className={`rounded px-2 py-0.5 text-xs font-medium ${propsOr(carsPage, 1) >= propsOr(carsTotalPages, 1) ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
@@ -749,8 +750,8 @@ const UserTable = ({
   expandedUserId,
   onToggleExpand,
   onRequestDeleteCar,
-  showToast = () => {},
-  askConfirm = () => {},
+  showToast = () => { },
+  askConfirm = () => { },
 }: UserTableProps) => {
   const [saving, setSaving] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -782,6 +783,7 @@ const UserTable = ({
     preferredTime2: expandedUser.preferredTime2 || "",
     membershipEnabled: !!expandedUser.membershipEnabled,
     isSubscribed: !!expandedUser.isSubscribed,
+    membershipStartDate: expandedUser.membershipStartDate || "",
     role: expandedUser.role || "user",
   } : {});
 
@@ -913,7 +915,7 @@ const UserTable = ({
                     <div className="flex items-center justify-center gap-2">
                       <button
                         onClick={() => onToggleExpand && onToggleExpand(uid)}
-                        className="rounded bg-[#ff3366] px-3 py-1 text-xs text-white hover:bg-[#ff1149] transition-colors font-medium"
+                        className="rounded bg-[#FF991C] px-3 py-1 text-xs text-white hover:bg-[#E68A19] transition-colors font-medium"
                       >
                         {isExpanded ? "Hide" : "Manage"}
                       </button>
@@ -998,13 +1000,22 @@ const UserTable = ({
                               <span>Is Subscribed</span>
                             </label>
                           </div>
+                          <div className="pt-2">
+                            <label className={labelCls}>Membership Start Date</label>
+                            <input
+                              type="date"
+                              value={form.membershipStartDate ? new Date(form.membershipStartDate).toISOString().split('T')[0] : ""}
+                              onChange={(e) => setForm((s: any) => ({ ...s, membershipStartDate: e.target.value }))}
+                              className={inputCls}
+                            />
+                          </div>
                         </div>
 
                         {/* Account & Cars */}
                         <div className="space-y-3 pt-4 border-t border-white/10">
                           <div className="flex items-center justify-between">
                             <h4 className="text-xs font-bold text-white uppercase tracking-widest">Account & Cars</h4>
-                            <button onClick={() => setShowDetails(!showDetails)} className="text-xs text-[#ff3366] hover:text-white">
+                            <button onClick={() => setShowDetails(!showDetails)} className="text-xs text-[#FF991C] hover:text-white">
                               {showDetails ? "Hide" : "View"} Details
                             </button>
                           </div>
@@ -1076,13 +1087,14 @@ const UserTable = ({
                       </div>
                     </td>
                   </tr>
-                )}
+                )
+                }
               </Fragment>
             );
           })}
         </tbody>
       </table>
-    </div>
+    </div >
   );
 };
 
@@ -1101,18 +1113,18 @@ type UserCardProps = {
   showToast?: (msg: string, type?: "success" | "error") => void;
 };
 
-const UserCard = ({ 
-  user, 
-  cars, 
-  carCount, 
-  onDeleteUser, 
-  createCar, 
-  deleteCar, 
-  refreshUsers, 
-  isOpen = false, 
-  onToggle, 
-  onRequestDeleteCar, 
-  showToast = () => {} 
+const UserCard = ({
+  user,
+  cars,
+  carCount,
+  onDeleteUser,
+  createCar,
+  deleteCar,
+  refreshUsers,
+  isOpen = false,
+  onToggle,
+  onRequestDeleteCar,
+  showToast = () => { }
 }: UserCardProps) => {
   const [saving, setSaving] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -1130,6 +1142,7 @@ const UserCard = ({
     preferredTime2: user.preferredTime2 || "",
     membershipEnabled: !!user.membershipEnabled,
     isSubscribed: !!user.isSubscribed,
+    membershipStartDate: user.membershipStartDate || "",
     role: user.role || "user",
   });
 
@@ -1202,16 +1215,14 @@ const UserCard = ({
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
             <div className="text-sm font-bold text-white">{user.name || "—"}</div>
-            <span className={`px-2 py-1 text-xs rounded font-medium ${
-              user.role === "admin" ? "bg-red-600/20 text-red-300" : 
-              user.role === "editor" ? "bg-blue-600/20 text-blue-300" : 
-              "bg-white/10 text-white/70"
-            }`}>
+            <span className={`px-2 py-1 text-xs rounded font-medium ${user.role === "admin" ? "bg-red-600/20 text-red-300" :
+              user.role === "editor" ? "bg-blue-600/20 text-blue-300" :
+                "bg-white/10 text-white/70"
+              }`}>
               {user.role?.toUpperCase() || "USER"}
             </span>
-            <span className={`px-2 py-1 text-xs rounded font-medium ${
-              user.isSubscribed ? "bg-green-600/20 text-green-300" : "bg-gray-600/20 text-gray-300"
-            }`}>
+            <span className={`px-2 py-1 text-xs rounded font-medium ${user.isSubscribed ? "bg-green-600/20 text-green-300" : "bg-gray-600/20 text-gray-300"
+              }`}>
               {user.isSubscribed ? "SUBSCRIBED" : "FREE"}
             </span>
           </div>
@@ -1222,14 +1233,14 @@ const UserCard = ({
         <div className="text-right">
           <div className="text-xs text-white/70 mb-3">Cars: {carCount}</div>
           <div className="flex flex-col gap-2">
-            <button 
-              onClick={() => onToggle && onToggle()} 
+            <button
+              onClick={() => onToggle && onToggle()}
               className="px-4 py-2 text-xs bg-[var(--accent)] text-white rounded font-medium hover:opacity-90"
             >
               {isOpen ? "Hide" : "Manage"}
             </button>
-            <button 
-              onClick={() => onDeleteUser(String(ownerId))} 
+            <button
+              onClick={() => onDeleteUser(String(ownerId))}
               className="px-4 py-2 text-xs bg-red-600 text-white rounded font-medium hover:opacity-90"
             >
               Delete
@@ -1244,12 +1255,12 @@ const UserCard = ({
           {/* LOCATION & CONTACT */}
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-white uppercase tracking-widest">Location & Contact</h3>
-            
+
             <div>
               <label className={labelCls}>Name</label>
-              <input 
-                value={form.name} 
-                onChange={(e) => setForm((s: any) => ({ ...s, name: e.target.value }))} 
+              <input
+                value={form.name}
+                onChange={(e) => setForm((s: any) => ({ ...s, name: e.target.value }))}
                 placeholder="Full name"
                 className={inputCls}
               />
@@ -1257,9 +1268,9 @@ const UserCard = ({
 
             <div>
               <label className={labelCls}>Email</label>
-              <input 
-                value={form.email} 
-                onChange={(e) => setForm((s: any) => ({ ...s, email: e.target.value }))} 
+              <input
+                value={form.email}
+                onChange={(e) => setForm((s: any) => ({ ...s, email: e.target.value }))}
                 placeholder="user@example.com"
                 className={inputCls}
               />
@@ -1267,9 +1278,9 @@ const UserCard = ({
 
             <div>
               <label className={labelCls}>Phone</label>
-              <input 
-                value={form.phone} 
-                onChange={(e) => setForm((s: any) => ({ ...s, phone: e.target.value }))} 
+              <input
+                value={form.phone}
+                onChange={(e) => setForm((s: any) => ({ ...s, phone: e.target.value }))}
                 placeholder="(555) 123-4567"
                 className={inputCls}
               />
@@ -1277,9 +1288,9 @@ const UserCard = ({
 
             <div>
               <label className={labelCls}>Street Address</label>
-              <input 
-                value={form.address} 
-                onChange={(e) => setForm((s: any) => ({ ...s, address: e.target.value }))} 
+              <input
+                value={form.address}
+                onChange={(e) => setForm((s: any) => ({ ...s, address: e.target.value }))}
                 placeholder="123 Main St"
                 className={inputCls}
               />
@@ -1288,18 +1299,18 @@ const UserCard = ({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className={labelCls}>City</label>
-                <input 
-                  value={form.city} 
-                  onChange={(e) => setForm((s: any) => ({ ...s, city: e.target.value }))} 
+                <input
+                  value={form.city}
+                  onChange={(e) => setForm((s: any) => ({ ...s, city: e.target.value }))}
                   placeholder="City"
                   className={inputCls}
                 />
               </div>
               <div>
                 <label className={labelCls}>ZIP Code</label>
-                <input 
-                  value={form.zip} 
-                  onChange={(e) => setForm((s: any) => ({ ...s, zip: e.target.value }))} 
+                <input
+                  value={form.zip}
+                  onChange={(e) => setForm((s: any) => ({ ...s, zip: e.target.value }))}
                   placeholder="12345"
                   className={inputCls}
                 />
@@ -1310,12 +1321,12 @@ const UserCard = ({
           {/* SCHEDULING & MEMBERSHIP */}
           <div className="space-y-4 pt-6 border-t border-white/10">
             <h3 className="text-sm font-bold text-white uppercase tracking-widest">Scheduling & Membership</h3>
-            
+
             <div>
               <label className={labelCls}>Service Notes</label>
-              <textarea 
-                value={form.notes} 
-                onChange={(e) => setForm((s: any) => ({ ...s, notes: e.target.value }))} 
+              <textarea
+                value={form.notes}
+                onChange={(e) => setForm((s: any) => ({ ...s, notes: e.target.value }))}
                 placeholder="Any special notes or requests..."
                 rows={3}
                 className={inputCls}
@@ -1325,18 +1336,18 @@ const UserCard = ({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className={labelCls}>Preferred Day 1</label>
-                <input 
-                  value={form.preferredDay1} 
-                  onChange={(e) => setForm((s: any) => ({ ...s, preferredDay1: e.target.value }))} 
+                <input
+                  value={form.preferredDay1}
+                  onChange={(e) => setForm((s: any) => ({ ...s, preferredDay1: e.target.value }))}
                   placeholder="Monday"
                   className={inputCls}
                 />
               </div>
               <div>
                 <label className={labelCls}>Preferred Time 1</label>
-                <input 
-                  value={form.preferredTime1} 
-                  onChange={(e) => setForm((s: any) => ({ ...s, preferredTime1: e.target.value }))} 
+                <input
+                  value={form.preferredTime1}
+                  onChange={(e) => setForm((s: any) => ({ ...s, preferredTime1: e.target.value }))}
                   placeholder="9:00 AM"
                   className={inputCls}
                 />
@@ -1346,18 +1357,18 @@ const UserCard = ({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className={labelCls}>Preferred Day 2</label>
-                <input 
-                  value={form.preferredDay2} 
-                  onChange={(e) => setForm((s: any) => ({ ...s, preferredDay2: e.target.value }))} 
+                <input
+                  value={form.preferredDay2}
+                  onChange={(e) => setForm((s: any) => ({ ...s, preferredDay2: e.target.value }))}
                   placeholder="Wednesday"
                   className={inputCls}
                 />
               </div>
               <div>
                 <label className={labelCls}>Preferred Time 2</label>
-                <input 
-                  value={form.preferredTime2} 
-                  onChange={(e) => setForm((s: any) => ({ ...s, preferredTime2: e.target.value }))} 
+                <input
+                  value={form.preferredTime2}
+                  onChange={(e) => setForm((s: any) => ({ ...s, preferredTime2: e.target.value }))}
                   placeholder="2:00 PM"
                   className={inputCls}
                 />
@@ -1366,7 +1377,7 @@ const UserCard = ({
 
             <div className="grid grid-cols-2 gap-4 pt-2">
               <label className="flex items-center gap-2 text-sm text-white cursor-pointer">
-                <input 
+                <input
                   type="checkbox"
                   checked={form.membershipEnabled}
                   onChange={(e) => setForm((s: any) => ({ ...s, membershipEnabled: e.target.checked }))}
@@ -1375,7 +1386,7 @@ const UserCard = ({
                 <span>Membership Enabled</span>
               </label>
               <label className="flex items-center gap-2 text-sm text-white cursor-pointer">
-                <input 
+                <input
                   type="checkbox"
                   checked={form.isSubscribed}
                   onChange={(e) => setForm((s: any) => ({ ...s, isSubscribed: e.target.checked }))}
@@ -1384,15 +1395,24 @@ const UserCard = ({
                 <span>Is Subscribed</span>
               </label>
             </div>
+            <div className="pt-2 mt-2 border-t border-white/5">
+              <label className={labelCls}>Membership Start Date</label>
+              <input
+                type="date"
+                value={form.membershipStartDate ? new Date(form.membershipStartDate).toISOString().split('T')[0] : ""}
+                onChange={(e) => setForm((s: any) => ({ ...s, membershipStartDate: e.target.value }))}
+                className={inputCls}
+              />
+            </div>
           </div>
 
           {/* ACCOUNT & ROLES + CARS */}
           <div className="space-y-4 pt-6 border-t border-white/10">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold text-white uppercase tracking-widest">Account & Cars</h3>
-              <button 
+              <button
                 onClick={() => setShowDetails(!showDetails)}
-                className="text-xs text-[#ff3366] hover:text-white"
+                className="text-xs text-[#FF991C] hover:text-white"
               >
                 {showDetails ? "Hide" : "View / Edit"} Details
               </button>
@@ -1403,7 +1423,7 @@ const UserCard = ({
               <div className="space-y-4 p-4 bg-gray-900/30 rounded border border-white/5">
                 <div>
                   <label className={labelCls}>User Role</label>
-                  <select 
+                  <select
                     value={form.role}
                     onChange={(e) => setForm((s: any) => ({ ...s, role: e.target.value }))}
                     className={inputCls}
@@ -1429,7 +1449,7 @@ const UserCard = ({
             {/* Cars Management */}
             <div className="space-y-3">
               <label className="text-sm font-bold text-white uppercase tracking-widest">Owned Cars</label>
-              
+
               {ownedCars.length > 0 ? (
                 <div className="space-y-2">
                   {ownedCars.map((c) => (
@@ -1438,7 +1458,7 @@ const UserCard = ({
                         <div className="font-medium text-white text-sm">{c.make} {c.model}</div>
                         <div className="text-xs text-white/60">{c.licensePlate}{c.color ? ` • ${c.color}` : ""}</div>
                       </div>
-                      <button 
+                      <button
                         onClick={() => {
                           if (typeof onRequestDeleteCar === "function") {
                             onRequestDeleteCar(String(c.id ?? c._id));
@@ -1461,33 +1481,33 @@ const UserCard = ({
               <div className="space-y-3 pt-3 border-t border-white/10">
                 <label className="text-xs font-bold text-white uppercase tracking-widest block">Add New Car</label>
                 <div className="grid grid-cols-2 gap-3">
-                  <input 
-                    placeholder="Make" 
-                    value={carForm.make} 
-                    onChange={(e) => setCarForm(s => ({ ...s, make: e.target.value }))} 
+                  <input
+                    placeholder="Make"
+                    value={carForm.make}
+                    onChange={(e) => setCarForm(s => ({ ...s, make: e.target.value }))}
                     className={inputCls}
                   />
-                  <input 
-                    placeholder="Model" 
-                    value={carForm.model} 
-                    onChange={(e) => setCarForm(s => ({ ...s, model: e.target.value }))} 
+                  <input
+                    placeholder="Model"
+                    value={carForm.model}
+                    onChange={(e) => setCarForm(s => ({ ...s, model: e.target.value }))}
                     className={inputCls}
                   />
-                  <input 
-                    placeholder="License Plate" 
-                    value={carForm.licensePlate} 
-                    onChange={(e) => setCarForm(s => ({ ...s, licensePlate: e.target.value }))} 
+                  <input
+                    placeholder="License Plate"
+                    value={carForm.licensePlate}
+                    onChange={(e) => setCarForm(s => ({ ...s, licensePlate: e.target.value }))}
                     className={inputCls}
                   />
-                  <input 
-                    placeholder="Color (optional)" 
-                    value={carForm.color} 
-                    onChange={(e) => setCarForm(s => ({ ...s, color: e.target.value }))} 
+                  <input
+                    placeholder="Color (optional)"
+                    value={carForm.color}
+                    onChange={(e) => setCarForm(s => ({ ...s, color: e.target.value }))}
                     className={inputCls}
                   />
                 </div>
-                <button 
-                  onClick={handleAddCar} 
+                <button
+                  onClick={handleAddCar}
                   disabled={carLoading}
                   className="w-full px-4 py-2 bg-[var(--accent)] text-white rounded font-medium text-sm hover:opacity-90 disabled:opacity-50"
                 >
@@ -1499,14 +1519,14 @@ const UserCard = ({
 
           {/* Save/Cancel Buttons */}
           <div className="flex gap-3 pt-6 border-t border-white/10">
-            <button 
-              onClick={save} 
+            <button
+              onClick={save}
               disabled={saving}
               className="flex-1 px-4 py-3 bg-white text-black rounded font-semibold text-sm hover:opacity-90 disabled:opacity-50"
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>
-            <button 
+            <button
               onClick={() => onToggle && onToggle()}
               className="flex-1 px-4 py-3 border border-white/10 text-white rounded font-semibold text-sm hover:bg-white/5"
             >
@@ -1545,7 +1565,7 @@ export function Dashboard() {
 
   // track which user card is expanded (only one at a time)
   const [expandedUserId, setExpandedUserId] = useState<string | null>(null);
-  
+
   // view toggle: 'cards' or 'table'
   const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
 
@@ -1841,7 +1861,7 @@ export function Dashboard() {
         <div className="flex flex-wrap justify-between items-end mb-16 pb-6 border-b border-white/10">
           <div>
             <h1 className="text-4xl font-black text-white uppercase tracking-tighter mb-2">
-              Admin <span className="text-[#ff3366]">Control</span>
+              Admin <span className="text-[#FF991C]">Control</span>
             </h1>
             <p className="text-[#999] uppercase tracking-widest text-sm">
               Manage platform users & stats
@@ -1858,196 +1878,196 @@ export function Dashboard() {
           <StatCard label="Cars" value={stats.carCount} />
         </section>
 
-      {/* Users list & actions */}
-      <section className="space-y-4">
-        <div className="bg-[#111] border border-white/5 p-6 rounded-xl flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-          <h2 className="text-xl font-semibold text-white">Users</h2>
-          <div className="flex gap-2 flex-wrap">
-            <button
-              onClick={() => setViewMode(viewMode === 'cards' ? 'table' : 'cards')}
-              className="rounded bg-[#111] border border-white/5 px-3 py-1 text-sm font-medium text-white hover:opacity-90"
-            >
-              {viewMode === 'cards' ? '≡ Table' : '◆ Cards'}
-            </button>
-            <button
-              onClick={() => {
-                setShowCreate((s) => !s);
-                setCreateForm({ name: "", email: "", role: "user" });
-              }}
-              className="rounded bg-[#111] border border-white/5 px-3 py-1 text-sm font-medium text-white hover:opacity-90"
-            >
-              {showCreate ? "Close" : "New User"}
-            </button>
-            <button
-              onClick={() => {
-                refreshUsers();
-                refreshCars();
-              }}
-              className="rounded bg-[#111] border border-white/5 px-3 py-1 text-sm font-medium text-white hover:opacity-90"
-            >
-              Refresh
-            </button>
+        {/* Users list & actions */}
+        <section className="space-y-4">
+          <div className="bg-[#111] border border-white/5 p-6 rounded-xl flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+            <h2 className="text-xl font-semibold text-white">Users</h2>
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={() => setViewMode(viewMode === 'cards' ? 'table' : 'cards')}
+                className="rounded bg-[#111] border border-white/5 px-3 py-1 text-sm font-medium text-white hover:opacity-90"
+              >
+                {viewMode === 'cards' ? '≡ Table' : '◆ Cards'}
+              </button>
+              <button
+                onClick={() => {
+                  setShowCreate((s) => !s);
+                  setCreateForm({ name: "", email: "", role: "user" });
+                }}
+                className="rounded bg-[#111] border border-white/5 px-3 py-1 text-sm font-medium text-white hover:opacity-90"
+              >
+                {showCreate ? "Close" : "New User"}
+              </button>
+              <button
+                onClick={() => {
+                  refreshUsers();
+                  refreshCars();
+                }}
+                className="rounded bg-[#111] border border-white/5 px-3 py-1 text-sm font-medium text-white hover:opacity-90"
+              >
+                Refresh
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* error */}
-        {error && <p className="text-sm text-red-600">{error}</p>}
+          {/* error */}
+          {error && <p className="text-sm text-red-600">{error}</p>}
 
-        {/* create‑user form (inline) */}
-        {showCreate && (
-          <Card>
-            <UserForm
-              form={createForm}
-              setForm={setCreateForm}
-              loading={loading}
-              onSubmit={createUser}
-              onCancel={() => setShowCreate(false)}
-              isEdit={false}
+          {/* create‑user form (inline) */}
+          {showCreate && (
+            <Card>
+              <UserForm
+                form={createForm}
+                setForm={setCreateForm}
+                loading={loading}
+                onSubmit={createUser}
+                onCancel={() => setShowCreate(false)}
+                isEdit={false}
+              />
+            </Card>
+          )}
+
+          {/* Users as cards or table based on viewMode */}
+          {viewMode === 'cards' ? (
+            <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-4 md:p-6">
+              {users.map((u) => {
+                const uid = u.id ?? u._id!;
+                // compute carCount by matching user id
+                const carCount = cars.filter((c) => {
+                  const raw = c.userId ?? c.user ?? null;
+                  let id = raw;
+                  if (raw && typeof raw === "object") id = (raw as any)._id ?? (raw as any).id ?? raw;
+                  return String(id) === String(uid);
+                }).length;
+
+                return (
+                  <UserCard
+                    key={String(uid)}
+                    user={u}
+                    cars={cars}
+                    carCount={carCount}
+                    onDeleteUser={deleteUser}
+                    createCar={createCar}
+                    deleteCar={deleteCar}
+                    refreshUsers={refreshUsers}
+                    isOpen={expandedUserId === String(uid)}
+                    onToggle={() => setExpandedUserId(prev => prev === String(uid) ? null : String(uid))}
+                    onRequestDeleteCar={(id: string) => askConfirm("Delete this car?", async () => await deleteCar(id))}
+                    showToast={showToast}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <UserTable
+              users={users}
+              cars={cars}
+              onDeleteUser={deleteUser}
+              createCar={createCar}
+              deleteCar={deleteCar}
+              refreshUsers={refreshUsers}
+              expandedUserId={expandedUserId}
+              onToggleExpand={(id) => setExpandedUserId(prev => prev === id ? null : id)}
+              onRequestDeleteCar={(id: string) => askConfirm("Delete this car?", async () => await deleteCar(id))}
+              showToast={showToast}
+              askConfirm={askConfirm}
             />
-          </Card>
+          )}
+
+          {/* Pagination controls for users (First / Prev / Page input / Next / Last) */}
+          <div className="mt-4 flex items-center justify-between">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Page {usersPage} of {usersTotalPages}
+            </div>
+            <div className="flex gap-2 items-center">
+              <button
+                onClick={() => refreshUsers(1)}
+                disabled={usersPage <= 1}
+                className={`rounded px-3 py-1 text-sm font-medium ${usersPage <= 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
+              >
+                First
+              </button>
+              <button
+                onClick={() => refreshUsers(Math.max(1, usersPage - 1))}
+                disabled={usersPage <= 1}
+                className={`rounded px-3 py-1 text-sm font-medium ${usersPage <= 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
+              >
+                Prev
+              </button>
+
+              <input
+                type="number"
+                min={1}
+                max={usersTotalPages}
+                value={usersPage}
+                onChange={(e) => {
+                  const v = Math.max(1, Math.min(usersTotalPages, Number(e.target.value || 1)));
+                  setUsersPage(v);
+                  refreshUsers(v);
+                }}
+                className="w-20 rounded border border-gray-300 bg-white dark:bg-gray-900 p-1 text-sm text-gray-900 dark:text-gray-100"
+              />
+
+              <button
+                onClick={() => refreshUsers(Math.min(usersTotalPages, usersPage + 1))}
+                disabled={usersPage >= usersTotalPages}
+                className={`rounded px-3 py-1 text-sm font-medium ${usersPage >= usersTotalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
+              >
+                Next
+              </button>
+              <button
+                onClick={() => refreshUsers(usersTotalPages)}
+                disabled={usersPage >= usersTotalPages}
+                className={`rounded px-3 py-1 text-sm font-medium ${usersPage >= usersTotalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
+              >
+                Last
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Edit‑User modal (compact) */}
+        <EditUserModal
+          open={editModalOpen}
+          onClose={closeEditModal}
+          user={editingUser}
+          form={editForm}
+          setForm={setEditForm}
+          loading={loading}
+          onSave={saveEditUser}
+        />
+
+        {/* Full‑User modal (expand) */}
+        <UserModal
+          user={modalUser}
+          form={modalForm}
+          setForm={setModalForm}
+          loading={modalLoading}
+          onSave={saveModal}
+          onClose={closeModal}
+          cars={cars}
+          createCar={createCar}
+          deleteCar={deleteCar}
+          showToast={showToast}
+          askConfirm={askConfirm}
+          carsPage={carsPage}
+          carsTotalPages={carsTotalPages}
+          setCarsPage={setCarsPage}
+          refreshCars={refreshCars}
+        />
+        {/* Confirmation modal (centralized replacement for window.confirm) */}
+        {confirmState?.open && (
+          <Modal open={true} onClose={() => setConfirmState(null)} title="Confirm" size="sm" actions={
+            <>
+              <button onClick={() => setConfirmState(null)} className="px-3 py-1 rounded border">Cancel</button>
+              <button onClick={async () => { await runConfirm(); }} className="px-3 py-1 rounded bg-red-600 text-white">Confirm</button>
+            </>
+          }>
+            <div className="p-2">
+              <p>{confirmState?.message}</p>
+            </div>
+          </Modal>
         )}
-
-        {/* Users as cards or table based on viewMode */}
-        {viewMode === 'cards' ? (
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-4 md:p-6">
-            {users.map((u) => {
-              const uid = u.id ?? u._id!;
-              // compute carCount by matching user id
-              const carCount = cars.filter((c) => {
-                const raw = c.userId ?? c.user ?? null;
-                let id = raw;
-                if (raw && typeof raw === "object") id = (raw as any)._id ?? (raw as any).id ?? raw;
-                return String(id) === String(uid);
-              }).length;
-
-              return (
-                <UserCard
-                  key={String(uid)}
-                  user={u}
-                  cars={cars}
-                  carCount={carCount}
-                  onDeleteUser={deleteUser}
-                  createCar={createCar}
-                  deleteCar={deleteCar}
-                  refreshUsers={refreshUsers}
-                  isOpen={expandedUserId === String(uid)}
-                  onToggle={() => setExpandedUserId(prev => prev === String(uid) ? null : String(uid))}
-                  onRequestDeleteCar={(id:string) => askConfirm("Delete this car?", async () => await deleteCar(id))}
-                  showToast={showToast}
-                />
-              );
-            })}
-          </div>
-        ) : (
-          <UserTable 
-            users={users} 
-            cars={cars} 
-            onDeleteUser={deleteUser}
-            createCar={createCar}
-            deleteCar={deleteCar}
-            refreshUsers={refreshUsers}
-            expandedUserId={expandedUserId}
-            onToggleExpand={(id) => setExpandedUserId(prev => prev === id ? null : id)}
-            onRequestDeleteCar={(id:string) => askConfirm("Delete this car?", async () => await deleteCar(id))}
-            showToast={showToast}
-            askConfirm={askConfirm}
-          />
-        )}
-
-        {/* Pagination controls for users (First / Prev / Page input / Next / Last) */}
-        <div className="mt-4 flex items-center justify-between">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Page {usersPage} of {usersTotalPages}
-          </div>
-          <div className="flex gap-2 items-center">
-            <button
-              onClick={() => refreshUsers(1)}
-              disabled={usersPage <= 1}
-              className={`rounded px-3 py-1 text-sm font-medium ${usersPage <= 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
-            >
-              First
-            </button>
-            <button
-              onClick={() => refreshUsers(Math.max(1, usersPage - 1))}
-              disabled={usersPage <= 1}
-              className={`rounded px-3 py-1 text-sm font-medium ${usersPage <= 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
-            >
-              Prev
-            </button>
-
-            <input
-              type="number"
-              min={1}
-              max={usersTotalPages}
-              value={usersPage}
-              onChange={(e) => {
-                const v = Math.max(1, Math.min(usersTotalPages, Number(e.target.value || 1)));
-                setUsersPage(v);
-                refreshUsers(v);
-              }}
-              className="w-20 rounded border border-gray-300 bg-white dark:bg-gray-900 p-1 text-sm text-gray-900 dark:text-gray-100"
-            />
-
-            <button
-              onClick={() => refreshUsers(Math.min(usersTotalPages, usersPage + 1))}
-              disabled={usersPage >= usersTotalPages}
-              className={`rounded px-3 py-1 text-sm font-medium ${usersPage >= usersTotalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
-            >
-              Next
-            </button>
-            <button
-              onClick={() => refreshUsers(usersTotalPages)}
-              disabled={usersPage >= usersTotalPages}
-              className={`rounded px-3 py-1 text-sm font-medium ${usersPage >= usersTotalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[var(--accent)] text-white hover:opacity-90'}`}
-            >
-              Last
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Edit‑User modal (compact) */}
-      <EditUserModal
-        open={editModalOpen}
-        onClose={closeEditModal}
-        user={editingUser}
-        form={editForm}
-        setForm={setEditForm}
-        loading={loading}
-        onSave={saveEditUser}
-      />
-
-      {/* Full‑User modal (expand) */}
-      <UserModal
-        user={modalUser}
-        form={modalForm}
-        setForm={setModalForm}
-        loading={modalLoading}
-        onSave={saveModal}
-        onClose={closeModal}
-        cars={cars}
-        createCar={createCar}
-        deleteCar={deleteCar}
-        showToast={showToast}
-        askConfirm={askConfirm}
-        carsPage={carsPage}
-        carsTotalPages={carsTotalPages}
-        setCarsPage={setCarsPage}
-        refreshCars={refreshCars}
-      />
-      {/* Confirmation modal (centralized replacement for window.confirm) */}
-      {confirmState?.open && (
-        <Modal open={true} onClose={() => setConfirmState(null)} title="Confirm" size="sm" actions={
-          <>
-            <button onClick={() => setConfirmState(null)} className="px-3 py-1 rounded border">Cancel</button>
-            <button onClick={async () => { await runConfirm(); }} className="px-3 py-1 rounded bg-red-600 text-white">Confirm</button>
-          </>
-        }>
-          <div className="p-2">
-            <p>{confirmState?.message}</p>
-          </div>
-        </Modal>
-      )}
       </div>
     </main>
   );

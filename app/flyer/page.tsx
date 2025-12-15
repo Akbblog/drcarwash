@@ -63,22 +63,22 @@ export default function FlyerPage() {
                 {/* Background Effects - Using explicit RGBA to avoid oklab */}
                 <div
                     className="absolute inset-0 opacity-50 group-hover:opacity-70 transition-opacity duration-500"
-                    style={{ background: 'radial-gradient(circle at center, rgba(255,51,102,0.2), transparent, transparent)' }}
+                    style={{ background: 'radial-gradient(circle at center, rgba(255,153,28,0.2), transparent, transparent)' }}
                 />
                 <div
                     className="absolute top-0 left-0 w-full h-1"
-                    style={{ background: 'linear-gradient(90deg, transparent, #ff3366, transparent)' }}
+                    style={{ background: 'linear-gradient(90deg, transparent, #FF991C, transparent)' }}
                 />
                 <div
                     className="absolute bottom-0 left-0 w-full h-1"
-                    style={{ background: 'linear-gradient(90deg, transparent, #ff3366, transparent)' }}
+                    style={{ background: 'linear-gradient(90deg, transparent, #FF991C, transparent)' }}
                 />
 
                 {/* Header */}
                 <div className="relative z-10 mt-4">
                     <h3 className="text-[rgba(255,255,255,0.6)] text-xs tracking-[0.3em] uppercase mb-2">Premium Doorstep Service</h3>
                     <h1 className="text-2xl font-bold text-white tracking-wider uppercase">
-                        Family <span className="text-[#ff3366]">Car Wash</span>
+                        Family <span className="text-[#FF991C]">Car Wash</span>
                     </h1>
                 </div>
 
@@ -90,11 +90,11 @@ export default function FlyerPage() {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         className="relative"
                     >
-                        <div className="text-[120px] font-black text-white leading-none tracking-tighter" style={{ textShadow: "0 0 40px rgba(255,51,102,0.3)" }}>
+                        <div className="text-[120px] font-black text-white leading-none tracking-tighter" style={{ textShadow: "0 0 40px rgba(255,153,28,0.3)" }}>
                             60
                         </div>
                         <div
-                            className="absolute -top-4 -right-8 rotate-12 bg-[#ff3366] text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg"
+                            className="absolute -top-4 -right-8 rotate-12 bg-[#FF991C] text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg"
                             style={{ borderColor: 'rgba(255,255,255,0.2)', borderWidth: '1px', borderStyle: 'solid' }}
                         >
                             LIMITED
@@ -105,7 +105,7 @@ export default function FlyerPage() {
                         Slots <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #ffffff, rgba(255,255,255,0.5))' }}>Only</span>
                     </h2>
 
-                    <div className="w-12 h-1 bg-[#ff3366] rounded-full my-6" />
+                    <div className="w-12 h-1 bg-[#FF991C] rounded-full my-6" />
 
                     <p className="text-[#9ca3af] text-sm max-w-[80%] leading-relaxed">
                         Join our exclusive bi-weekly detailing route.

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post 4 - Minimalist Premium</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1080px;
+            background: #0a0a0a;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Geometric pattern background */
+        .grid-pattern {
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(255, 51, 102, 0.03) 50px, rgba(255, 51, 102, 0.03) 53px),
+                repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(255, 51, 102, 0.03) 50px, rgba(255, 51, 102, 0.03) 53px);
+        }
+
+        /* Floating car illustration */
+        .car-graphic {
+            position: absolute;
+            top: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 150px;
+            opacity: 0.15;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .car-outline {
+            stroke: #ff3366;
+            stroke-width: 4;
+            fill: none;
+            filter: drop-shadow(0 0 20px rgba(255, 51, 102, 0.6));
+        }
+
+        .card {
+            position: relative;
+            z-index: 10;
+            width: 850px;
+            padding: 100px 80px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 80px;
+            font-weight: 300;
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+        }
+
+        .divider {
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #ff3366, transparent);
+            margin: 50px auto;
+        }
+
+        .message {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+            margin-bottom: 60px;
+            font-weight: 300;
+        }
+
+        .price-minimal {
+            display: inline-block;
+            padding: 30px 60px;
+            border: 3px solid #ff3366;
+            border-radius: 8px;
+            margin-bottom: 50px;
+        }
+
+        .price-minimal .amount {
+            font-size: 72px;
+            font-weight: 900;
+            color: #ff3366;
+            line-height: 1;
+        }
+
+        .price-minimal .term {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-pattern"></div>
+
+    <svg class="car-graphic" viewBox="0 0 300 150">
+        <!-- Simple car outline -->
+        <path class="car-outline" d="M 50,90 L 80,60 L 120,60 L 140,80 L 240,80 L 250,90 L 50,90 Z" />
+        <circle class="car-outline" cx="100" cy="90" r="20" />
+        <circle class="car-outline" cx="220" cy="90" r="20" />
+        <rect class="car-outline" x="140" y="50" width="80" height="30" rx="5" />
+    </svg>
+
+    <div class="card">
+        <div class="logo">Family Car Wash</div>
+
+        <div class="title">
+            PREMIUM<br>
+            CARE
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="message">
+            Unlimited detailing service.<br>
+            Your doorstep. Your schedule.
+        </div>
+
+        <div class="price-minimal">
+            <div class="amount">$349</div>
+            <div class="term">Monthly</div>
+        </div>
+
+        <div class="footer-text">Limited to 60 Members</div>
+    </div>
+</body>
+
+</html>

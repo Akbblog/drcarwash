@@ -75,7 +75,7 @@ export default async function Dashboard() {
         <div className="flex flex-wrap justify-between items-end mb-16 pb-6 border-b border-white/10">
           <div>
             <h1 className="text-4xl font-black text-white uppercase tracking-tighter mb-2">
-              Garage <span className="text-[#ff3366]">Control</span>
+              Garage <span className="text-[#FF991C]">Control</span>
             </h1>
             <p className="text-[#999] uppercase tracking-widest text-sm">
               Manage your garage & subscription
@@ -93,7 +93,7 @@ export default async function Dashboard() {
             {/* MEMBERSHIP STATUS CARD */}
             <div
               className={`p-8 rounded-xl border ${isSubscribed
-                ? 'bg-[#ff3366]/10 border-[#ff3366]/30'
+                ? 'bg-[#FF991C]/10 border-[#FF991C]/30'
                 : isWaitlisted
                   ? 'bg-yellow-500/10 border-yellow-500/20'  // ⭐ WAITLIST COLOR
                   : 'bg-[#111] border-white/5'
@@ -104,7 +104,7 @@ export default async function Dashboard() {
 
                 {/* Pulse for active */}
                 {isSubscribed && (
-                  <span className="ml-2 inline-block w-2 h-2 bg-[#ff3366] rounded-full animate-pulse" />
+                  <span className="ml-2 inline-block w-2 h-2 bg-[#FF991C] rounded-full animate-pulse" />
                 )}
 
                 {/* ⭐ WAITLIST PULSE ICON */}
@@ -118,7 +118,7 @@ export default async function Dashboard() {
               {isSubscribed ? (
                 // ⭐ ACTIVE VIEW
                 <div>
-                  <div className="text-2xl font-black text-[#ff3366] mb-2">
+                  <div className="text-2xl font-black text-[#FF991C] mb-2">
                     ACTIVE
                   </div>
                   <p className="text-[#999] text-sm">

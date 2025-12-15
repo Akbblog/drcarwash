@@ -27,6 +27,7 @@ export interface IUser extends Document {
   waitlistStatus: "none" | "joined";
   waitlistJoinedAt?: Date | null;
   membershipEnabled: boolean;
+  membershipStartDate?: Date | null;
 
   // Phone & role
   phone?: string;
@@ -75,6 +76,7 @@ const UserSchema: Schema<IUser> = new Schema(
     waitlistJoinedAt: { type: Date, default: null },
 
     membershipEnabled: { type: Boolean, default: false },
+    membershipStartDate: { type: Date, default: null },
 
     // --- PHONE & ROLE ---
     phone: { type: String },

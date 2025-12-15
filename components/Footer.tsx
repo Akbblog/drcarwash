@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
         <div className="col-span-1 md:col-span-2">
           <Link href="/" className="flex items-center mb-4">
-            <span className="text-2xl font-black tracking-tighter bg-gradient-to-br from-white to-[#ff3366] bg-clip-text text-transparent">
+            <span className="text-2xl font-black tracking-tighter bg-gradient-to-br from-white to-[#FF991C] bg-clip-text text-transparent">
               FAMILY WASH
             </span>
           </Link>
@@ -20,10 +20,10 @@ export default function Footer() {
         <div>
           <h4 className="text-white uppercase tracking-widest font-bold mb-4 text-xs">Menu</h4>
           <ul className="space-y-2">
-            <li><Link href="/" className="text-[#999] text-sm hover:text-[#ff3366] transition-colors">Home</Link></li>
-            <li><Link href="/#services" className="text-[#999] text-sm hover:text-[#ff3366] transition-colors">Services</Link></li>
-            <li><Link href="/dashboard" className="text-[#999] text-sm hover:text-[#ff3366] transition-colors">My Garage</Link></li>
-            <li><Link href="/contact" className="text-[#999] text-sm hover:text-[#ff3366] transition-colors">Contact Us</Link></li>
+            <li><Link href="/" className="text-[#999] text-sm hover:text-[#FF991C] transition-colors">Home</Link></li>
+            <li><Link href="/#services" className="text-[#999] text-sm hover:text-[#FF991C] transition-colors">Services</Link></li>
+            <li><Link href="/dashboard" className="text-[#999] text-sm hover:text-[#FF991C] transition-colors">My Garage</Link></li>
+            <li><Link href="/contact" className="text-[#999] text-sm hover:text-[#FF991C] transition-colors">Contact Us</Link></li>
           </ul>
         </div>
 
@@ -31,10 +31,10 @@ export default function Footer() {
           <h4 className="text-white uppercase tracking-widest font-bold mb-4 text-xs">Follow Us</h4>
           <div className="flex items-center gap-4">
             <a
-              href="https://www.facebook.com/profile.php?id=61584149892617"
+              // href="https://www.facebook.com/profile.php?id=61584149892617"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#999] hover:text-[#ff3366] transition-colors group"
+              className="text-[#999] hover:text-[#FF991C] transition-colors group"
               aria-label="Facebook"
             >
               <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
@@ -42,10 +42,10 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://www.instagram.com/familycarwash.com.au/"
+              // href="https://www.instagram.com/familycarwash.com.au/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#999] hover:text-[#ff3366] transition-colors group"
+              className="text-[#999] hover:text-[#FF991C] transition-colors group"
               aria-label="Instagram"
             >
               <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
@@ -56,7 +56,11 @@ export default function Footer() {
         </div>
       </div>
 
-
+      <div className="text-center pt-8 border-t border-white/5">
+        <p className="text-[#666] text-xs uppercase tracking-widest">
+          © {new Date().getFullYear()} Family Car Wash. All rights reserved.
+        </p>
+      </div>
     </footer>
   );
 }

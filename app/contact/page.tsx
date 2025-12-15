@@ -91,7 +91,7 @@ export default function ContactPage() {
         <div className="flex flex-wrap justify-between items-end mb-12 pb-6 border-b border-white/10">
           <div>
             <h1 className="text-4xl font-black text-white uppercase tracking-tighter mb-2">
-              Contact <span className="text-[#ff3366]">Support</span>
+              Contact <span className="text-[#FF991C]">Support</span>
             </h1>
             <p className="text-[#999] uppercase tracking-widest text-sm">
               We're here to help — reach out anytime
@@ -114,7 +114,7 @@ export default function ContactPage() {
             {/* NAME */}
             <div className={cn("relative", errors.name && "animate-shake")}>
               <label htmlFor="name" className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-                
+
               </label>
               <input
                 id="name"
@@ -123,7 +123,7 @@ export default function ContactPage() {
                 required
                 placeholder="Full Name"
                 className={cn(
-                  "w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] focus:ring-2 focus:ring-accent transition-colors",
+                  "w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] focus:ring-2 focus:ring-accent transition-colors",
                   errors.name && "border-red-500"
                 )}
               />
@@ -133,7 +133,7 @@ export default function ContactPage() {
             {/* PHONE */}
             <div className={cn("relative", errors.phone && "animate-shake")}>
               <label htmlFor="phone" className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-                
+
               </label>
               <input
                 id="phone"
@@ -142,7 +142,7 @@ export default function ContactPage() {
                 required
                 placeholder="Phone Number"
                 className={cn(
-                  "w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] focus:ring-2 focus:ring-accent transition-colors",
+                  "w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] focus:ring-2 focus:ring-accent transition-colors",
                   errors.phone && "border-red-500"
                 )}
               />
@@ -152,7 +152,7 @@ export default function ContactPage() {
             {/* EMAIL */}
             <div className={cn("relative", errors.email && "animate-shake")}>
               <label htmlFor="email" className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-                
+
               </label>
               <input
                 id="email"
@@ -161,7 +161,7 @@ export default function ContactPage() {
                 required
                 placeholder="Email Address"
                 className={cn(
-                  "w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] focus:ring-2 focus:ring-accent transition-colors",
+                  "w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] focus:ring-2 focus:ring-accent transition-colors",
                   errors.email && "border-red-500"
                 )}
               />
@@ -171,7 +171,7 @@ export default function ContactPage() {
             {/* MESSAGE */}
             <div className={cn("relative", errors.message && "animate-shake")}>
               <label htmlFor="message" className="block text-[11px] text-[#999] uppercase tracking-widest mb-2">
-                
+
               </label>
               <textarea
                 id="message"
@@ -180,7 +180,7 @@ export default function ContactPage() {
                 required
                 placeholder="Your Message"
                 className={cn(
-                  "w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#ff3366] focus:ring-2 focus:ring-accent transition-colors",
+                  "w-full bg-black border border-white/10 px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#FF991C] focus:ring-2 focus:ring-accent transition-colors",
                   errors.message && "border-red-500"
                 )}
               />
@@ -195,7 +195,7 @@ export default function ContactPage() {
                 "w-full py-3 rounded-md font-bold uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2",
                 loading
                   ? "bg-[#444] text-white/50 cursor-not-allowed"
-                  : "bg-white text-black hover:bg-[#ff3366] hover:text-white"
+                  : "bg-white text-black hover:bg-[#FF991C] hover:text-white"
               )}
             >
               {loading ? (

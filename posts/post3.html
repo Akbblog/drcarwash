@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post 3 - Split Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1080px;
+            background: #0a0a0a;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Left side - image */
+        .left {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .car-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+        }
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(10, 10, 10, 0.8) 100%);
+        }
+
+        /* Right side - content */
+        .right {
+            flex: 1;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            padding: 80px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Decorative accent */
+        .accent-bar {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 300px;
+            background: linear-gradient(180deg, transparent, #ff3366, transparent);
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.8);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 51, 102, 0.15);
+            border: 2px solid rgba(255, 51, 102, 0.4);
+            border-radius: 25px;
+            color: #ff3366;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            width: fit-content;
+        }
+
+        .title {
+            font-size: 56px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .highlight {
+            color: #ff3366;
+        }
+
+        .description {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 50px;
+        }
+
+        .price-section {
+            margin-bottom: 40px;
+        }
+
+        .price-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-size: 72px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(255, 51, 102, 0.5);
+        }
+
+        .period {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
+        }
+
+        .features {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #ff3366;
+            border-radius: 8px;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+        }
+
+        .feature-text {
+            font-size: 16px;
+            color: #fff;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left">
+            <img src="C:/Users/Computer Max/.gemini/antigravity/brain/65e07949-d510-440e-88f1-fbf1ace2cb52/shiny_car_front_1764621764632.png"
+                alt="Car" class="car-image">
+            <div class="image-overlay"></div>
+        </div>
+
+        <div class="right">
+            <div class="accent-bar"></div>
+
+            <div class="badge">🏆 Premium Service</div>
+
+            <div class="title">
+                FLEXIBLE<br>
+                <span class="highlight">MONTHLY</span><br>
+                BOOKING
+            </div>
+
+            <div class="description">
+                Schedule anytime throughout the month. Professional detailing delivered to your doorstep.
+            </div>
+
+            <div class="price-section">
+                <div class="price-label">Membership</div>
+                <div class="price">$349</div>
+                <div class="period">/month</div>
+            </div>
+
+            <div class="features">
+                <div class="feature-item">
+                    <div class="feature-icon">📅</div>
+                    <div class="feature-text">Book Anytime</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🚗</div>
+                    <div class="feature-text">Doorstep Service</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text">Only 60 Slots</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

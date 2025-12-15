@@ -32,7 +32,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center no-underline transition-transform duration-300 hover:scale-105">
           <svg
             viewBox="0 0 20.75 22.17"
-            className="w-10 h-10 mr-2.5 fill-current text-[#ff3366]"
+            className="w-10 h-10 mr-2.5 fill-current text-[#FF991C]"
           >
             <path d="M10.79,12.77C9.47,11.44,9.23,9.66,8.64,8a9.47,9.47,0,0,1-2.23,4.86c-1.3,1.33-3.06,1.67-4.78,2.26,4.13.51,6.38,2.85,7,7,.59-4.14,2.88-6.4,6.92-6.93C13.91,14.43,12.12,14.13,10.79,12.77Z" />
             <path d="M17.81,10.21c.56-2.49,1.83-4.16,4.56-4.47A5.29,5.29,0,0,1,17.8,1.13a5,5,0,0,1-4.53,4.6A5,5,0,0,1,17.81,10.21Z" />
@@ -40,14 +40,14 @@ export default function Navbar() {
             <path d="M6.17,6.22a4.14,4.14,0,0,1,.88-1.78,10.87,10.87,0,0,1,1.75-1A3,3,0,0,1,6.12.91,3,3,0,0,1,3.54,3.45,3.35,3.35,0,0,1,6.17,6.22Z" />
           </svg>
 
-          <span className="text-3xl font-black tracking-tighter bg-gradient-to-br from-white to-[#ff3366] bg-clip-text text-transparent">
+          <span className="text-3xl font-black tracking-tighter bg-gradient-to-br from-white to-[#FF991C] bg-clip-text text-transparent">
             FAMILY CAR WASH
           </span>
         </Link>
 
         {/* Mobile menu button */}
         <button
-          className="md:hidden text-white hover:text-[#ff3366]"
+          className="md:hidden text-white hover:text-[#FF991C]"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <XIcon /> : <MenuIcon />}
@@ -63,7 +63,7 @@ export default function Navbar() {
               <Link
                 href="/dashboard"
                 prefetch={true}
-                className="bg-[#ff3366] text-white px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-[1px] uppercase hover:bg-[#ff1149] transition-all shadow-lg shadow-[#ff3366]/20"
+                className="bg-[#FF991C] text-white px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-[1px] uppercase hover:bg-[#E68A19] transition-all shadow-lg shadow-[#FF991C]/20"
               >
                 Your Garage
               </Link>
@@ -71,7 +71,7 @@ export default function Navbar() {
           ) : (
             <li>
               <Link href="/login" prefetch={true} className="text-white/70 text-[13px] tracking-[2px] uppercase hover:text-white mr-4">Log In</Link>
-              <Link href="/register" prefetch={true} className="bg-[#ff3366] text-white px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-[1px] uppercase hover:bg-[#ff1149]">
+              <Link href="/register" prefetch={true} className="bg-[#FF991C] text-white px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-[1px] uppercase hover:bg-[#E68A19]">
                 Join Now
               </Link>
             </li>

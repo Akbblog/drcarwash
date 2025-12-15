@@ -26,7 +26,7 @@ export default function CarList({ cars }: { cars: Car[] }) {
     <div>
       <h2 className="text-2xl font-bold text-white uppercase tracking-wider mb-8">
         Registered Vehicles{' '}
-        <span className="text-[#ff3366]">({cars.length})</span>
+        <span className="text-[#FF991C]">({cars.length})</span>
       </h2>
 
       {cars.length === 0 ? (
@@ -54,10 +54,10 @@ export default function CarList({ cars }: { cars: Car[] }) {
               <h3 className="text-xl font-bold text-white mb-1">
                 {car.make} {car.model}
               </h3>
-              <div className="text-[#ff3366] font-mono text-sm uppercase tracking-wider mb-4">
+              <div className="text-[#FF991C] font-mono text-sm uppercase tracking-wider mb-4">
                 [{car.licensePlate}]
               </div>
-              
+
               {/* Delete Button */}
               <button
                 onClick={() => handleDelete(car._id)}

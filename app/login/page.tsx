@@ -47,7 +47,7 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-6 pt-24 relative overflow-hidden">
-      <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_bottom_left,_rgba(255,51,102,0.1),_transparent_50%)]"></div>
+      <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_bottom_left,_rgba(255,153,28,0.1),_transparent_50%)]"></div>
 
       {/* Loading Overlay */}
       {loading && (
@@ -56,7 +56,7 @@ export default function LoginPage() {
             {/* Spinner */}
             <div className="relative w-20 h-20 mx-auto mb-6">
               <div className="absolute inset-0 border-4 border-white/10 rounded-full"></div>
-              <div className="absolute inset-0 border-4 border-transparent border-t-[#ff3366] rounded-full animate-spin"></div>
+              <div className="absolute inset-0 border-4 border-transparent border-t-[#FF991C] rounded-full animate-spin"></div>
             </div>
             {/* Loading Text */}
             <p className="text-white font-bold uppercase tracking-widest text-sm animate-pulse">
@@ -69,7 +69,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-[#111] p-10 rounded-xl border border-white/5 relative z-10 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-black text-white uppercase tracking-wider mb-2">
-            Welcome <span className="text-[#ff3366]">Back</span>
+            Welcome <span className="text-[#FF991C]">Back</span>
           </h1>
           <p className="text-[#999] text-sm uppercase tracking-widest">
             Access Your Garage
@@ -93,7 +93,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="JOHN@EXAMPLE.COM"
-              className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-[#ff3366] transition-colors"
+              className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-[#FF991C] transition-colors"
             />
           </div>
 
@@ -105,7 +105,7 @@ export default function LoginPage() {
 
               <Link
                 href="/forgot-password"
-                className="text-[10px] text-[#666] uppercase tracking-widest hover:text-[#ff3366] transition-colors"
+                className="text-[10px] text-[#666] uppercase tracking-widest hover:text-[#FF991C] transition-colors"
               >
                 Forgot?
               </Link>
@@ -117,14 +117,14 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-[#ff3366] transition-colors"
+              className="w-full bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-[#FF991C] transition-colors"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 bg-[#ff3366] text-white font-bold uppercase tracking-widest text-sm hover:bg-[#ff1149] hover:shadow-[0_10px_30px_rgba(255,51,102,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-4 bg-[#FF991C] text-white font-bold uppercase tracking-widest text-sm hover:bg-[#E68A19] hover:shadow-[0_10px_30px_rgba(255,153,28,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Accessing..." : "Enter Garage"}
           </button>
@@ -132,7 +132,7 @@ export default function LoginPage() {
 
         <p className="text-center mt-8 text-[#999] text-sm">
           New here?{" "}
-          <Link href="/register" className="text-[#ff3366] font-semibold hover:underline">
+          <Link href="/register" className="text-[#FF991C] font-semibold hover:underline">
             Start Membership
           </Link>
         </p>

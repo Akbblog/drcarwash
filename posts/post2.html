@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post 2 - Doorstep Excellence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1080px;
+            background: #0a0a0a;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Image background with overlay */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            background: url('C:/Users/Computer Max/.gemini/antigravity/brain/65e07949-d510-440e-88f1-fbf1ace2cb52/shiny_car_front_1764621764632.png') center/cover;
+            filter: brightness(0.3) blur(2px);
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(26, 26, 26, 0.85) 50%, rgba(10, 10, 10, 0.9) 100%);
+        }
+
+        .card {
+            position: relative;
+            z-index: 10;
+            width: 900px;
+            height: 900px;
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: rgba(17, 17, 17, 0.7);
+            border: 3px solid rgba(255, 51, 102, 0.5);
+            border-radius: 32px;
+            backdrop-filter: blur(30px);
+            box-shadow: 0 0 100px rgba(255, 51, 102, 0.4);
+        }
+
+        .icon {
+            font-size: 100px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 40px rgba(255, 51, 102, 0.8);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .title {
+            font-size: 72px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 30px;
+            line-height: 1.1;
+            text-transform: uppercase;
+            text-shadow: 0 0 40px rgba(255, 51, 102, 0.6);
+        }
+
+        .tagline {
+            font-size: 28px;
+            color: #ff3366;
+            font-weight: bold;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .description {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 60px;
+            max-width: 650px;
+        }
+
+        .price-box {
+            background: linear-gradient(135deg, #ff3366, #ff1149);
+            padding: 50px 100px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(255, 51, 102, 0.5);
+            margin-bottom: 40px;
+        }
+
+        .price {
+            font-size: 88px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .period {
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 10px;
+        }
+
+        .cta {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 30px;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <div class="card">
+        <div class="icon">🚗</div>
+
+        <div class="title">
+            DOORSTEP<br>EXCELLENCE
+        </div>
+
+        <div class="tagline">Professional Car Care</div>
+
+        <div class="description">
+            We come to you. Premium detailing service delivered right to your location.
+        </div>
+
+        <div class="price-box">
+            <div class="price">$349</div>
+            <div class="period">PER MONTH</div>
+        </div>
+
+        <div class="cta">Book Your Spot Today • Limited Slots</div>
+    </div>
+</body>
+
+</html>
