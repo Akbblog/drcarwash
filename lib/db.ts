@@ -9,11 +9,10 @@ const MONGODB_URI = process.env.MONGODB_URI as string; // validated below at run
 /* ─────────────────────────────────────────────────────────────────────
    If the URI is missing, throw an explicit error
    ───────────────────────────────────────────────────────────────────── */
-if (!MONGODB_URI) {
-  throw new Error(
-    "Please define the MONGODB_URI environment variable in .env.local"
-  );
-}
+
+
+// removed explicit error throw here to prevent build failures
+
 
 /* ─────────────────────────────────────────────────────────────────────
    2️⃣ Caching logic (dev hot‑reload friendly)
@@ -46,6 +45,11 @@ export async function connectDB(): Promise<typeof mongoose> {
 
   // Create the connection promise once
   if (!cached.promise) {
+    if (!MONGODB_URI) {
+      throw new Error(
+        "Please define the MONGODB_URI environment variable in .env.local"
+      );
+    }
     const opts = { bufferCommands: false };
     cached.promise = mongoose
       .connect(MONGODB_URI, opts)
