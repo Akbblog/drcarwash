@@ -15,14 +15,11 @@ const nextConfig: NextConfig = {
   // Compression for better performance
   compress: true,
 
-  // Experimental features for performance
-  experimental: {
-    // Enable optimistic client cache
-    optimisticClientCache: true,
-
-    // Optimize CSS
-    optimizeCss: true,
-  },
+  // Experimental features (Disabled for stability on Vercel)
+  // experimental: {
+  //   optimisticClientCache: true,
+  //   optimizeCss: true,
+  // },
 
   // Empty turbopack config to silence Next.js 16 warnings
   turbopack: {},
