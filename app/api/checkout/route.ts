@@ -4,7 +4,8 @@ import Stripe from "stripe";
 import connectDB from "@/lib/db";
 import Car from "@/lib/models/Car";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+// Initialize Stripe lazily or with a dummy key during build if missing
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "dummy_key_for_build", {
   apiVersion: "2025-10-29.clover",
   typescript: true,
 });
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
     const carCount = await Car.countDocuments({ userId: session.user.id });
 
     if (carCount === 0) {
-        return NextResponse.json({ message: "Please add at least one car before subscribing." }, { status: 400 });
+      return NextResponse.json({ message: "Please add at least one car before subscribing." }, { status: 400 });
     }
 
     // 3. Prepare Line Items (The Bill)
@@ -33,20 +34,20 @@ export async function POST(req: Request) {
     if (!basePriceId) throw new Error("Missing STRIPE_PRICE_ID");
 
     line_items.push({
-        price: basePriceId,
-        quantity: 1,
+      price: basePriceId,
+      quantity: 1,
     });
 
     // Extra cars = Add-on Price ($100 each)
     if (carCount > 1) {
-        const addonPriceId = process.env.STRIPE_ADDON_PRICE_ID;
-        // If you haven't created the addon price yet, this will just ignore extra cars for now.
-        if (addonPriceId) {
-             line_items.push({
-                price: addonPriceId,
-                quantity: carCount - 1, // e.g., 3 cars total = 1 base + 2 addons
-            });
-        }
+      const addonPriceId = process.env.STRIPE_ADDON_PRICE_ID;
+      // If you haven't created the addon price yet, this will just ignore extra cars for now.
+      if (addonPriceId) {
+        line_items.push({
+          price: addonPriceId,
+          quantity: carCount - 1, // e.g., 3 cars total = 1 base + 2 addons
+        });
+      }
     }
 
     // 4. Create Stripe Session
@@ -62,7 +63,7 @@ export async function POST(req: Request) {
       },
       subscription_data: {
         metadata: {
-            userId: session.user.id, // Keep userId on the subscription too for easy webhook lookup
+          userId: session.user.id, // Keep userId on the subscription too for easy webhook lookup
         }
       }
     });

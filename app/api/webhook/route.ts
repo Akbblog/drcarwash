@@ -4,7 +4,8 @@ import Stripe from "stripe";
 import connectDB from "@/lib/db";
 import User from "@/lib/models/User";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+// Initialize Stripe lazily or with a dummy key during build if missing
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "dummy_key_for_build", {
   apiVersion: "2025-10-29.clover",
   typescript: true,
 });
@@ -38,12 +39,12 @@ export async function POST(req: Request) {
     // When a subscription is updated (e.g. cancelled, payment failed)
     // We can add more logic here later to handle cancellations.
     case "customer.subscription.deleted": {
-       const subscription = event.data.object as Stripe.Subscription;
-       await handleSubscriptionDeleted(subscription);
-       break;
+      const subscription = event.data.object as Stripe.Subscription;
+      await handleSubscriptionDeleted(subscription);
+      break;
     }
     default:
-      // console.log(`Unhandled event type ${event.type}`);
+    // console.log(`Unhandled event type ${event.type}`);
   }
 
   return new NextResponse(null, { status: 200 });
@@ -52,31 +53,31 @@ export async function POST(req: Request) {
 // --- HELPER FUNCTIONS ---
 
 async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
-    const userId = session.metadata?.userId;
-    if (!userId) {
-        console.error("Missing userId in session metadata");
-        return;
-    }
+  const userId = session.metadata?.userId;
+  if (!userId) {
+    console.error("Missing userId in session metadata");
+    return;
+  }
 
-    await connectDB();
-    // Update user: set subscribed = true, save Stripe IDs
-    await User.findByIdAndUpdate(userId, {
-        isSubscribed: true,
-        stripeCustomerId: session.customer as string,
-        subscriptionId: session.subscription as string,
-    });
-    console.log(`✅ User ${userId} subscription activated!`);
+  await connectDB();
+  // Update user: set subscribed = true, save Stripe IDs
+  await User.findByIdAndUpdate(userId, {
+    isSubscribed: true,
+    stripeCustomerId: session.customer as string,
+    subscriptionId: session.subscription as string,
+  });
+  console.log(`✅ User ${userId} subscription activated!`);
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
-     const userId = subscription.metadata?.userId;
-     if (!userId) return;
+  const userId = subscription.metadata?.userId;
+  if (!userId) return;
 
-     await connectDB();
-     // Turn off access if they cancel
-     await User.findByIdAndUpdate(userId, {
-         isSubscribed: false,
-         subscriptionId: null,
-     });
-     console.log(`❌ User ${userId} subscription deactivated.`);
+  await connectDB();
+  // Turn off access if they cancel
+  await User.findByIdAndUpdate(userId, {
+    isSubscribed: false,
+    subscriptionId: null,
+  });
+  console.log(`❌ User ${userId} subscription deactivated.`);
 }
