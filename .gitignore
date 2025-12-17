@@ -42,3 +42,5 @@ next-env.d.ts
 
 .flyer.html
 .facebook-cover.html
+.vercel
+.env*.local
