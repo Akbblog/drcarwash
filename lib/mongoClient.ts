@@ -1,9 +1,5 @@
 import { MongoClient } from 'mongodb'
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"')
-}
-
 const uri = process.env.MONGODB_URI
 const options = {}
 
@@ -15,6 +11,9 @@ if (process.env.NODE_ENV === 'development') {
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
   // @ts-ignore
   if (!global._mongoClientPromise) {
+    if (!uri) {
+      throw new Error('Invalid/Missing environment variable: "MONGODB_URI"')
+    }
     client = new MongoClient(uri, options)
     // @ts-ignore
     global._mongoClientPromise = client.connect()
@@ -23,8 +22,14 @@ if (process.env.NODE_ENV === 'development') {
   clientPromise = global._mongoClientPromise
 } else {
   // In production mode, it's best to not use a global variable.
-  client = new MongoClient(uri, options)
-  clientPromise = client.connect()
+  // Only throw if we're actually using the connection (lazy check)
+  clientPromise = (async () => {
+    if (!uri) {
+      throw new Error('Invalid/Missing environment variable: "MONGODB_URI"')
+    }
+    const client = new MongoClient(uri, options)
+    return client.connect()
+  })()
 }
 
 // Export a module-scoped MongoClient promise. By doing this in a
